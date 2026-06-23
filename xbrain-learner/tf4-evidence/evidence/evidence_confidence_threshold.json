@@ -1,0 +1,62 @@
+{
+  "method": "Run REAL 3-sigma algorithm on 200 synthetic windows with known ground truth (50% drift injected at 3.5-8\u03c3 magnitude). NOT simulated confidence \u2014 actual z-score computation.",
+  "circular_reasoning_fix": "Previous version used random uniform confidence (self-grading). Now: generate baseline data \u2192 inject real drift \u2192 run 3-sigma \u2192 count TP/FP/TN/FN.",
+  "requirement": "FP \u226412% and Catch \u226580%",
+  "results": [
+    {
+      "sigma_threshold": 2.0,
+      "precision": 0.972,
+      "recall": 1.0,
+      "f1": 0.986,
+      "fp_rate": 0.032,
+      "brier_score": 0.0272,
+      "tp": 105,
+      "fp": 3,
+      "tn": 92,
+      "fn": 0,
+      "meets_requirement": true
+    },
+    {
+      "sigma_threshold": 2.5,
+      "precision": 0.98,
+      "recall": 1.0,
+      "f1": 0.99,
+      "fp_rate": 0.019,
+      "brier_score": 0.0256,
+      "tp": 97,
+      "fp": 2,
+      "tn": 101,
+      "fn": 0,
+      "meets_requirement": true
+    },
+    {
+      "sigma_threshold": 3.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "fp_rate": 0.0,
+      "brier_score": 0.0321,
+      "tp": 107,
+      "fp": 0,
+      "tn": 93,
+      "fn": 0,
+      "meets_requirement": true
+    },
+    {
+      "sigma_threshold": 3.5,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "fp_rate": 0.0,
+      "brier_score": 0.0302,
+      "tp": 100,
+      "fp": 0,
+      "tn": 100,
+      "fn": 0,
+      "meets_requirement": true
+    }
+  ],
+  "recommended_sigma": 3.0,
+  "brier_score_at_3sigma": 0.0321,
+  "brier_interpretation": "Brier score < 0.25 = good calibration. Lower = better."
+}

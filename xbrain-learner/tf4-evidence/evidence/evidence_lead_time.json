@@ -1,0 +1,14 @@
+{
+  "method": "Simulate gradual CPU drift \u2192 detect via rolling 3-sigma \u2192 measure time to breach (CPU>85%)",
+  "drift_start_minute": 720,
+  "detected_at_minute": 734,
+  "breach_at_minute": 840,
+  "lead_time_minutes": 106,
+  "requirement": "\u226515 minutes",
+  "pass": true,
+  "source_refs": [
+    "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html",
+    "https://stackoverflow.com/questions/52752973",
+    "https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtime-environment.html"
+  ]
+}

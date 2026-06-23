@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TF4 Foresight Lens — Capstone Phase 2</title>
+<meta name="description" content="TF4 Foresight Lens: Predictive capacity exhaustion engine for Fintech SRE. Capstone Phase 2 presentation.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   DESIGN SYSTEM — Premium Light Theme
+   ═══════════════════════════════════════════════════════ */
+:root {
+  --bg: #fafaf8;
+  --bg2: #f5f3ef;
+  --surface: rgba(0,0,0,0.02);
+  --surface2: rgba(0,0,0,0.03);
+  --surface3: rgba(0,0,0,0.05);
+  --glass: rgba(255,255,255,0.7);
+  --glass-border: rgba(0,0,0,0.08);
+  --ink: #1a1a2e;
+  --ink2: #4a5568;
+  --ink3: #94a3b8;
+  --accent: #e8850a;
+  --accent2: #ea6d0c;
+  --orange: #c2410c;
+  --blue: #2563eb;
+  --green: #16a34a;
+  --red: #dc2626;
+  --purple: #7c3aed;
+  --cyan: #0891b2;
+  --grad1: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+  --grad2: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  --grad3: linear-gradient(135deg, #22c55e 0%, #06b6d4 100%);
+  --grad-hero: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #8b5cf6 100%);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-glow: 0 8px 40px rgba(245,158,11,0.1);
+  --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: rgba(245,158,11,0.2); color: #1a1a2e; }
+a { color: var(--blue); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--cyan); }
+code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(0,0,0,0.05);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.85em;
+  color: var(--accent2);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SLIDE SECTIONS
+   ═══════════════════════════════════════════════════════ */
+.slide {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px 72px;
+  position: relative;
+  overflow: hidden;
+}
+.slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(245,158,11,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(59,130,246,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.content {
+  width: min(1180px, 100%);
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATED ELEMENTS (Reveal on scroll)
+   ═══════════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════ */
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--grad1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+h1 {
+  font-size: clamp(2.8rem, 4.5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+h2 {
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+.lead {
+  font-size: 1.05rem;
+  color: var(--ink2);
+  margin-bottom: 28px;
+  max-width: 900px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LAYOUT GRIDS
+   ═══════════════════════════════════════════════════════ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+/* ═══════════════════════════════════════════════════════
+   GLASS CARDS
+   ═══════════════════════════════════════════════════════ */
+.card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 26px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform var(--transition), border-color 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0,0,0,0.12);
+  box-shadow: var(--shadow-glow);
+}
+.card p {
+  font-size: 0.92rem;
+  color: var(--ink2);
+  line-height: 1.6;
+  margin: 0;
+}
+.card-accent-left {
+  border-left: 3px solid var(--accent);
+  border-left-width: 3px;
+}
+.card-danger {
+  border-color: rgba(220,38,38,0.25);
+  background: rgba(254,226,226,0.6);
+}
+.card-danger::before {
+  background: linear-gradient(90deg, transparent, rgba(220,38,38,0.15), transparent);
+}
+.card-success {
+  background: rgba(220,252,231,0.7);
+  border-color: rgba(22,163,74,0.25);
+}
+.card-warning {
+  background: rgba(255,247,237,0.8);
+  border-color: rgba(245,158,11,0.25);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TABLES
+   ═══════════════════════════════════════════════════════ */
+.tbl {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.88rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+.tbl th {
+  background: #1e293b;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  padding: 14px 18px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  border-bottom: none;
+}
+.tbl td {
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  color: var(--ink2);
+  line-height: 1.55;
+  transition: background 0.2s;
+}
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: rgba(0,0,0,0.02); }
+.tbl td:first-child {
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+}
+.tbl tr.row-danger {
+  background: rgba(254,226,226,0.5);
+}
+.tbl tr.row-danger td:first-child {
+  color: var(--red);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAGS / BADGES
+   ═══════════════════════════════════════════════════════ */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 99px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.tag-green { background: #dcfce7; color: #166534; }
+.tag-red { background: #fee2e2; color: #991b1b; }
+.tag-amber { background: #fef3c7; color: #92400e; }
+.tag-blue { background: #dbeafe; color: #1e40af; }
+
+/* ═══════════════════════════════════════════════════════
+   METRIC BARS (Animated)
+   ═══════════════════════════════════════════════════════ */
+.metric-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.metric-rank {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 800;
+  min-width: 36px;
+  color: var(--ink3);
+}
+.metric-bar {
+  flex: 1;
+  height: 34px;
+  background: rgba(0,0,0,0.04);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.metric-fill {
+  height: 100%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.metric-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.metric-fill.animated { /* width set by JS */ }
+
+/* ═══════════════════════════════════════════════════════
+   HERO BIG TEXT
+   ═══════════════════════════════════════════════════════ */
+.hero-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(6rem, 14vw, 11rem);
+  font-weight: 900;
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  filter: drop-shadow(0 0 40px rgba(245,158,11,0.12));
+  animation: hero-pulse 4s ease-in-out infinite alternate;
+}
+@keyframes hero-pulse {
+  0% { filter: drop-shadow(0 0 30px rgba(245,158,11,0.08)); }
+  100% { filter: drop-shadow(0 0 50px rgba(245,158,11,0.18)); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FLOATING ORBS (Decorative)
+   ═══════════════════════════════════════════════════════ */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  opacity: 0.35;
+  animation: float 20s ease-in-out infinite alternate;
+}
+.orb-1 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(245,158,11,0.15), transparent 70%);
+  top: -100px; right: -100px;
+  animation-duration: 18s;
+}
+.orb-2 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(59,130,246,0.1), transparent 70%);
+  bottom: -50px; left: -50px;
+  animation-duration: 22s;
+  animation-delay: -5s;
+}
+.orb-3 {
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation-duration: 25s;
+  animation-delay: -10s;
+}
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -30px) scale(1.05); }
+  66% { transform: translate(-15px, 20px) scale(0.95); }
+  100% { transform: translate(10px, -10px) scale(1.02); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER & NAVIGATION
+   ═══════════════════════════════════════════════════════ */
+.slide-footer {
+  position: absolute;
+  left: 50px; right: 50px; bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--ink3);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  z-index: 2;
+  letter-spacing: 0.04em;
+}
+.slide-footer::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent);
+}
+
+/* Progress bar */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--grad1);
+  z-index: 100;
+  transition: width 0.3s ease-out;
+  box-shadow: 0 0 12px rgba(245,158,11,0.4);
+}
+
+/* Slide counter */
+.counter {
+  position: fixed;
+  right: 24px; bottom: 24px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--ink2);
+  z-index: 60;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.3s;
+  cursor: default;
+}
+.counter:hover {
+  border-color: rgba(245,158,11,0.3);
+  color: var(--accent);
+}
+
+/* Nav dots */
+.nav-dots {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 60;
+}
+.nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.12);
+  transition: all 0.3s;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+.nav-dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(245,158,11,0.3);
+  transform: scale(1.4);
+}
+.nav-dot:hover:not(.active) {
+  background: rgba(0,0,0,0.25);
+  transform: scale(1.2);
+}
+
+/* Keyboard hint */
+.kbd-hint {
+  position: fixed;
+  left: 24px; bottom: 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--ink3);
+  z-index: 60;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.kbd-hint:hover { opacity: 1; }
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 5px;
+  font-size: 0.6rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   IMAGE SLIDES
+   ═══════════════════════════════════════════════════════ */
+.img-frame {
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  overflow: hidden;
+  background: var(--glass);
+  padding: 4px;
+}
+.img-frame img {
+  width: 100%;
+  max-height: 58vh;
+  object-fit: contain;
+  border-radius: calc(var(--radius) - 4px);
+  display: block;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SERVICE ICONS
+   ═══════════════════════════════════════════════════════ */
+.icon-circle {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SPECIAL: Title card with grid pattern
+   ═══════════════════════════════════════════════════════ */
+.grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black, transparent);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .slide { padding: 24px 20px 56px; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .nav-dots { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="counter" id="counter">1 / 27</div>
+
+<nav class="nav-dots" id="navDots"></nav>
+
+<div class="kbd-hint">
+  <span class="kbd">↑</span><span class="kbd">↓</span> navigate
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 01 — Title
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-1">
+  <div class="grid-pattern"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="content" style="text-align:center">
+    <div class="reveal">
+      <div class="eyebrow">Capstone Phase 2 · Task Force 4</div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="hero-text" style="margin-bottom:16px">TF4</div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <h1 style="font-size:clamp(2rem,3.5vw,3.2rem);font-weight:700;margin-bottom:8px">Foresight Lens</h1>
+      <p class="lead" style="margin:0 auto 32px;text-align:center;max-width:600px">
+        1 AIO + 3 CDO · 2 tuần · Dự đoán capacity exhaustion
+      </p>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <div class="grid-2" style="max-width:480px;margin:0 auto;gap:16px">
+        <div class="card" style="text-align:center;border-color:rgba(245,158,11,0.2);background:rgba(245,158,11,0.05)">
+          <div class="icon-circle" style="background:rgba(245,158,11,0.12);margin:0 auto 10px"></div>
+          <div style="font-weight:800;font-size:1rem;color:#1e293b">AIO</div>
+          <div style="font-size:0.82rem;color:var(--ink2);margin-top:4px">Build AI Engine</div>
+        </div>
+        <div class="card" style="text-align:center;border-color:rgba(59,130,246,0.2);background:rgba(59,130,246,0.05)">
+          <div class="icon-circle" style="background:rgba(59,130,246,0.12);margin:0 auto 10px">️</div>
+          <div style="font-weight:800;font-size:1rem;color:#1e293b">3 CDO Teams</div>
+          <div style="font-size:0.82rem;color:var(--ink2);margin-top:4px">3 nền tảng khác nhau</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>01 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 02 — Client & Vấn đề
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-2">
+  <div class="orb orb-3"></div>
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Bối cảnh</div></div>
+    <div class="reveal reveal-delay-1"><h2>Client & Vấn đề</h2></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-2">
+        <div class="card">
+          <h3> Client</h3>
+          <p>Head of SRE — Fintech mid-size, ~120 microservice.<br>ECS + RDS + DynamoDB + SQS.</p>
+        </div>
+        <div class="card card-danger">
+          <h3> Vấn đề</h3>
+          <p>Miss SLO <strong style="color:var(--red)">7 lần / 3 tháng</strong>. RDS CPU 100% trong 90ph, queue backlog 6x. Phát hiện qua user complain.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>02 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 03 — Giải pháp
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-3">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Giải pháp</div></div>
+    <div class="reveal reveal-delay-1"><h2>Giải pháp</h2></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-3">
+        <div class="card" style="text-align:center">
+          <div class="icon-circle" style="background:rgba(245,158,11,0.12);margin:0 auto 10px"></div>
+          <h3>Predict</h3>
+          <p>Học baseline. Detect drift trước SLO breach.</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="icon-circle" style="background:rgba(59,130,246,0.12);margin:0 auto 10px"></div>
+          <h3>Recommend</h3>
+          <p>Đề xuất scale action cụ thể.</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="icon-circle" style="background:rgba(34,197,94,0.12);margin:0 auto 10px"></div>
+          <h3>Approve</h3>
+          <p>Manual approve. CDO quyết định.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>03 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 04 — 3 Contracts
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-4">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Interface AIO ↔ CDO</div></div>
+    <div class="reveal reveal-delay-1"><h2>3 Contracts</h2></div>
+    <div class="reveal" style="margin-bottom:8px"><p class="lead">Đóng đinh T5 W11</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-3">
+        <div class="card card-accent-left">
+          <h3> Telemetry</h3>
+          <p>CDO emit metric đúng format. AIO draft, CDO ký.</p>
+        </div>
+        <div class="card card-accent-left">
+          <h3> AI API</h3>
+          <p>POST /v1/predict → drift + recommend + confidence + audit.</p>
+        </div>
+        <div class="card card-accent-left">
+          <h3> Deployment</h3>
+          <p>Serving: Lambda + API GW. Training: design-only. ap-southeast-1.</p>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <div class="card" style="margin-top:16px;text-align:center;border-color:rgba(245,158,11,0.2)">
+        <p><strong style="color:var(--accent)">T4 chiều draft → T5 sáng co-design → T5 chiều KÝ + FREEZE</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>04 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 05 — AI Engine
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-5">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">AIO Scope</div></div>
+    <div class="reveal reveal-delay-1"><h2>AI Engine</h2></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-2">
+        <div class="card">
+          <h3> Pipeline</h3>
+          <table class="tbl">
+            <tr><td>1. Ingest</td><td>Nhận metric từ CDO, validate schema</td></tr>
+            <tr><td>2. Baseline</td><td>EWMA + Isolation Forest — per-service</td></tr>
+            <tr><td>3. Drift Detect</td><td>Real-time vs baseline, lead time ≥15ph</td></tr>
+            <tr><td>4. Recommend</td><td>5 phần: verb + target + from→to + confidence</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <h3> Stack</h3>
+          <p style="line-height:1.8">
+            Lambda 512MB + API Gateway<br>
+            DynamoDB audit<br>
+            No LLM<br>
+            FP ≤ 12% · Catch ≥ 80%<br>
+            <strong style="color:var(--green)">Budget $200</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>05 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 06 — Scope Trích Brief
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-6">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Scope</div></div>
+    <div class="reveal reveal-delay-1"><h2>Đã Chốt — Phân Tích Yêu Cầu Gốc</h2></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><th>#</th><th>Mục</th><th>Trích nguyên văn</th><th>Dòng</th></tr>
+        <tr><td>1</td><td>Multi-tenant ≥3</td><td>"Multi-tenant ≥3 services (TF4 phải test đa-service vì chính là điểm bài toán)"</td><td>41</td></tr>
+        <tr><td>2</td><td>Lead time ≥15ph</td><td>"Lead time ≥15 phút trước SLO breach (test window ≥2h)"</td><td>39</td></tr>
+        <tr><td>3</td><td>Manual approve</td><td>"Predictive lens THUẦN - predict + recommend, manual approval gate OK. Không auto-remediation"</td><td>35-36</td></tr>
+        <tr><td>4</td><td>Synthetic data</td><td>"Historical 6-month training data (synthetic + 2-7 day generated OK)"</td><td>59</td></tr>
+        <tr><td>5</td><td>No LLM</td><td>"LLM-based prediction (cost prohibitive, statistical/ML đủ)"</td><td>63</td></tr>
+        <tr><td>6</td><td>Budget $200</td><td>"$200/tháng AWS bill budget rough cho capstone"</td><td>43</td></tr>
+        <tr><td>7</td><td>Per-service baseline</td><td>"Per-service baseline (không 1-size-fits-all), manual refresh OK"</td><td>42</td></tr>
+        <tr><td>8</td><td>Manual baseline train</td><td>"Manual baseline train 1 lần + ADR retrain trigger logic"</td><td>44</td></tr>
+        <tr><td>9</td><td>Single region</td><td>"Multi-region deployment (single region, DR design-only)"</td><td>55</td></tr>
+        <tr><td>10</td><td>Fail-open</td><td>"Fail-open fallback to static threshold khi serving endpoint down"</td><td>92</td></tr>
+        <tr><td>11</td><td>3 tier-1 đủ</td><td>">3 tenant/service test (3 tier-1 service đủ)"</td><td>58</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>06 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 07 — 29 Mục Phân Loại
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-7">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Brief Validation (5W2H Framework)</div></div>
+    <div class="reveal reveal-delay-1"><h2>14 Mục Cần Đào Sâu & Xác Nhận</h2></div>
+    <div class="reveal" style="margin-bottom:12px"><p class="lead">Áp dụng kỹ năng <strong>Questioning & Brief Validation (5W2H)</strong>, team đã khoanh vùng được 14 góc khuất kỹ thuật bắt buộc phải làm rõ với Client chiều nay.</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-2" style="margin-bottom:18px">
+        <div class="card card-warning" style="text-align:center">
+          <div style="font-size:2.2rem;font-weight:900;color:var(--accent)">8</div>
+          <div style="font-size:0.82rem;font-weight:700;color:var(--accent);margin-top:4px"> CẦN ĐÀO SÂU</div>
+          <p style="font-size:0.78rem;margin-top:6px">Brief chỉ hướng, cần xin chi tiết</p>
+        </div>
+        <div class="card card-danger" style="text-align:center">
+          <div style="font-size:2.2rem;font-weight:900;color:var(--red)">6</div>
+          <div style="font-size:0.82rem;font-weight:700;color:var(--red);margin-top:4px"> THẬT SỰ CẦN CONFIRM</div>
+          <p style="font-size:0.78rem;margin-top:6px">Brief hoàn toàn không có dữ kiện</p>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-3" style="max-height:44vh;overflow-y:auto;border-radius:var(--radius);scrollbar-width:thin;scrollbar-color:rgba(0,0,0,0.1) transparent">
+      <table class="tbl">
+        <tr><th>#</th><th>Chủ đề</th><th>Status</th><th>Lý do cần hỏi?</th></tr>
+        <!-- CẦN ĐÀO SÂU -->
+        <tr style="background:rgba(255,247,237,0.6)"><td>1</td><td>RPS từng service</td><td><span class="tag tag-amber">ĐÀO SÂU</span></td><td>Brief chỉ nói tổng 2.8k RPS. Cần breakdown.</td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>2</td><td>Lead time</td><td><span class="tag tag-amber">ĐÀO SÂU</span></td><td>"RDS scale up takes time". Cần thống nhất bao nhiêu phút là đủ.</td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>3</td><td>Conflict handling</td><td><span class="tag tag-amber">ĐÀO SÂU</span></td><td>"Surface cả 2 hay resolve?". AI có quyền can thiệp hay chỉ báo động?</td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>4</td><td>Seasonality</td><td><span class="tag tag-amber">ĐÀO SÂU</span></td><td>"9k RPS Black Friday". Cần thông tin chu kỳ ngày/tuần cụ thể.</td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>5</td><td>Onboarding</td><td><span class="tag tag-amber">ĐÀO SÂU</span></td><td>Pipeline timing thật mất bao lâu ngoài đời?</td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>6</td><td>Existing monitoring</td><td><span class="tag tag-amber">ĐÀO SÂU</span></td><td>"Grafana, CloudWatch". Alert của AI sẽ routing đi đâu?</td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>7</td><td>IAM + network</td><td><span class="tag tag-amber">ĐÀO SÂU</span></td><td>Thiết lập Cross-account access cho AIO team đọc metric?</td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>8</td><td>Failure mode</td><td><span class="tag tag-amber">ĐÀO SÂU</span></td><td>"Fail-open fallback to static threshold". Cần kênh alert khi AI chết.</td></tr>
+        <!-- THẬT SỰ CẦN CONFIRM -->
+        <tr class="row-danger"><td>9</td><td><strong>3 service tier-1?</strong></td><td><span class="tag tag-red">XIN DUYỆT</span></td><td>Slide sau AIO đã chọn PaymentGW, Fraud, Ledger. Cần Client gật đầu.</td></tr>
+        <tr class="row-danger"><td>10</td><td><strong>Pattern production?</strong></td><td><span class="tag tag-red">XIN DATA</span></td><td>Brief cho phép synthetic, nhưng vẫn nên xin pattern 24h thật để đối chiếu.</td></tr>
+        <tr class="row-danger"><td>11</td><td><strong>Stack từng service?</strong></td><td><span class="tag tag-red">CẦN CONFIRM</span></td><td>"ECS+RDS+DynamoDB+SQS" chung chung. KHÔNG biết service nào dùng gì.</td></tr>
+        <tr class="row-danger"><td>12</td><td><strong>FraudDetector?</strong></td><td><span class="tag tag-red">CẦN CONFIRM</span></td><td>Chỉ nhắc tên "fraud detection". Đây là ML hay rule engine?</td></tr>
+        <tr class="row-danger"><td>13</td><td><strong>Incident history</strong></td><td><span class="tag tag-red">CẦN CONFIRM</span></td><td>"miss SLO 7 lần". Cần bản Post-mortem chi tiết để train model.</td></tr>
+        <tr class="row-danger"><td>14</td><td><strong>API non-functional</strong></td><td><span class="tag tag-red">CẦN CONFIRM</span></td><td>"POST /v1/predict" nhưng KHÔNG specify latency/auth/rate limit.</td></tr>
+      </table>
+    </div>
+    <div class="reveal reveal-delay-4">
+      <div class="card" style="margin-top:14px;text-align:center;border-color:rgba(59,130,246,0.2)">
+        <p style="font-size:0.85rem"><strong>Hành động:</strong> Gom 14 mục kỹ thuật này thành file Agenda gửi trước cho Client trước giờ họp chiều T2.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>07 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 08 — Strategic Contract Boundaries
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-8">
+  <div class="orb orb-1" style="background:radial-gradient(circle,rgba(239,68,68,0.15),transparent 70%)"></div>
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">AI-CDO Interface Strategy</div></div>
+    <div class="reveal reveal-delay-1"><h2> 5 Contract Boundaries (Contract Boundaries)</h2></div>
+    <div class="reveal" style="margin-bottom:12px"><p class="lead">Dữ liệu chứng minh (evidence) đã PASS 100%. Nhiệm vụ chiều T4 và T5 là đàm phán 5 ranh giới này <strong>với 3 team CDO</strong> để bảo vệ AI Engine.</p></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><th>#</th><th>Loại Contract</th><th>Câu Hỏi Trọng Tâm Đàm Phán CDO</th><th>Lý do hỏi</th></tr>
+        <tr class="row-danger"><td>1</td><td><strong>Deployment</strong></td><td>AI host API tập trung (SaaS) hay đóng gói Docker giao cho CDO tự deploy lên VPC của họ?</td><td><span class="tag tag-red">BẢO VỆ KEY AI</span></td></tr>
+        <tr class="row-danger"><td>2</td><td><strong>Telemetry</strong></td><td>CDO phải viết code PUSH metrics sang cho AI, hay AI phải xin IAM Role sang PULL metrics của CDO?</td><td><span class="tag tag-red">CHIA TRÁCH NHIỆM</span></td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>3</td><td><strong>Data Isolation</strong></td><td>"Multi-tenant" là 3 services của 1 App, hay 3 Khách hàng khác biệt cần strict data isolation?</td><td><span class="tag tag-amber">SCOPE CREEP</span></td></tr>
+        <tr style="background:rgba(255,247,237,0.6)"><td>4</td><td><strong>Training Seed</strong></td><td>Dữ liệu 6 tháng để train: CDO dump sẵn file tĩnh cho AI, hay CDO giả lập DB để AI phải gọi API kéo về?</td><td><span class="tag tag-amber">TRÁNH LÀM THAY</span></td></tr>
+        <tr><td>5</td><td><strong>Action Routing</strong></td><td>Khi AI nhả JSON recommendation, CDO có trách nhiệm bắn alert PagerDuty/Slack không, hay AI tự làm?</td><td><span class="tag tag-blue">SYSTEM BOUNDARY</span></td></tr>
+      </table>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <div class="card card-danger" style="margin-top:14px;text-align:center">
+        <p><strong>Lưu Ý Đánh Giá Chéo:</strong> Contract giữa AI và CDO là bản lề của W12. Nếu không rào trước 5 điểm này, AI sẽ phải code bù phần việc của CDO.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>08 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 09 — 3 Service Demo
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-9">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Demo Scope</div></div>
+    <div class="reveal reveal-delay-1"><h2>3 Service — Per-Service Baseline</h2></div>
+    <div class="reveal"><p class="lead">Chọn 3/5. KYC + Reporting bị loại (xem slide sau).</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-3">
+        <div class="card" style="text-align:center">
+          <div class="icon-circle" style="background:rgba(245,158,11,0.12);margin:0 auto 10px"></div>
+          <h3>PaymentGW</h3>
+          <p style="font-size:0.82rem">Pattern chưa rõ<br>Bottleneck: CPU?</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="icon-circle" style="background:rgba(139,92,246,0.12);margin:0 auto 10px">️</div>
+          <h3>FraudDetector</h3>
+          <p style="font-size:0.82rem">Pattern chưa rõ<br>Bottleneck: Memory?</p>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="icon-circle" style="background:rgba(34,197,94,0.12);margin:0 auto 10px"></div>
+          <h3>Ledger</h3>
+          <p style="font-size:0.82rem">Pattern chưa rõ<br>Bottleneck: Queue?</p>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <div class="card" style="margin-top:16px">
+        <h3> CPU Comparison</h3>
+        <div class="img-frame" style="margin-top:10px">
+          <img src="tf4-evidence/evidence/service_comparison_cpu.png" alt="CPU comparison across 3 services">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>09 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 10 — PaymentGW Profile
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-10">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Payment Gateway (1/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> 24h Metric Profile</h2></div>
+    <div class="reveal"><p class="lead">Cổng thanh toán — route giao dịch đến ngân hàng.</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="img-frame">
+        <img src="tf4-evidence/evidence/service_payment-gw_profile.png" alt="PaymentGW 24h metric profile">
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>10 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 11 — PaymentGW Evidence
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-11">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Payment Gateway (2/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> Evidence</h2></div>
+    <div class="reveal"><p class="lead"><strong style="color:var(--accent)">[BRIEF]</strong> RDS CPU 100% trong 90ph. <strong style="color:var(--red)">[GIẢ ĐỊNH]</strong> Peak giờ hành chính, đêm idle. Cần confirm.</p></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><td>Bottleneck</td><td>"RDS CPU 100% trong 90ph"</td></tr>
+        <tr><td>Pattern</td><td>Peak 9h-11h + 14h-16h (peak/trough=1.9x)</td></tr>
+        <tr><td>Scenario</td><td>Gradual drift — CPU 50→95% trong 2h</td></tr>
+        <tr><td>Scale</td><td>RDS db.r6g.large → db.r6g.xlarge (~7ph)</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>11 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 12 — FraudDetector Profile
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-12">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Fraud Detector (1/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2>️ 24h Metric Profile</h2></div>
+    <div class="reveal"><p class="lead">Engine phát hiện gian lận. Mỗi giao dịch đều qua đây.</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="img-frame">
+        <img src="tf4-evidence/evidence/service_fraud-detector_profile.png" alt="FraudDetector 24h metric profile">
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>12 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 13 — FraudDetector Evidence
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-13">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Fraud Detector (2/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2>️ Evidence</h2></div>
+    <div class="reveal"><p class="lead"><strong style="color:var(--accent)">[BRIEF]</strong> Connection pool exhaust. <strong style="color:var(--red)">[GIẢ ĐỊNH]</strong> ML model 24/7, steady pattern.</p></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><td>Bottleneck</td><td>"Connection pool exhaust" — memory leak</td></tr>
+        <tr><td>Pattern</td><td>Gần như phẳng (peak/trough=1.0x)</td></tr>
+        <tr><td>Scenario</td><td>Slow leak + noisy baseline → test FP rate</td></tr>
+        <tr><td>Khó nhất</td><td>Phân biệt noise vs real leak</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>13 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 14 — Ledger Profile
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-14">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Ledger (1/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> 24h Metric Profile</h2></div>
+    <div class="reveal"><p class="lead">Sổ cái kế toán — đối soát giao dịch cuối ngày.</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="img-frame">
+        <img src="tf4-evidence/evidence/service_ledger_profile.png" alt="Ledger 24h metric profile">
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>14 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 15 — Ledger Evidence
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-15">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Ledger (2/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> Evidence</h2></div>
+    <div class="reveal"><p class="lead"><strong style="color:var(--accent)">[BRIEF]</strong> Queue backlog 6x. <strong style="color:var(--red)">[GIẢ ĐỊNH]</strong> Burst 23h-1h, idle ban ngày.</p></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><td>Bottleneck</td><td>"Queue backlog 6x" — SQS explode</td></tr>
+        <tr><td>Pattern</td><td>CPU ~5% cả ngày, burst ~90% 23h-1h (15.5x!)</td></tr>
+        <tr><td>Scenario</td><td>Sudden spike — queue tăng đột ngột</td></tr>
+        <tr><td>Đặc biệt</td><td>Pattern cực đoan nhất — stress test</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>15 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 16 — KYC Profile
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-16">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">KYC (1/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> Metric Profile</h2></div>
+    <div class="reveal"><p class="lead">Xác minh danh tính khách hàng.</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="img-frame">
+        <img src="tf4-evidence/evidence/service_kyc_profile.png" alt="KYC metric profile">
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>16 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 17 — KYC Loại
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-17">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">KYC (2/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> Tại Sao Bị Loại?</h2></div>
+    <div class="reveal"><p class="lead"><strong style="color:var(--red)">[GIẢ ĐỊNH]</strong> Batch async. <strong style="color:var(--accent)"> CẦN CONFIRM:</strong> Fintech hiện đại làm real-time.</p></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><td>1</td><td>Không real-time — batch job, không capacity pressure.</td></tr>
+        <tr><td>2</td><td>Không map bottleneck brief.</td></tr>
+        <tr><td>3</td><td>Pattern không khác biệt — batch đã được Ledger cover.</td></tr>
+      </table>
+      <div style="margin-top:16px;text-align:center;font-size:0.88rem;color:var(--ink3)">
+        Rớt 3/3. Nhưng nếu real-time → phải xét lại.
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>17 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 18 — Reporting Profile
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-18">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Reporting (1/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> Metric Profile</h2></div>
+    <div class="reveal"><p class="lead">Báo cáo định kỳ (doanh thu, giao dịch).</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="img-frame">
+        <img src="tf4-evidence/evidence/service_reporting_profile.png" alt="Reporting metric profile">
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>18 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 19 — Reporting Loại
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-19">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Reporting (2/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> Tại Sao Bị Loại?</h2></div>
+    <div class="reveal"><p class="lead"><strong style="color:var(--red)">[GIẢ ĐỊNH]</strong> 1-2 lần/tuần. <strong style="color:var(--accent)"> CẦN CONFIRM:</strong> Tần suất thật?</p></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><td>1</td><td>Không đủ data point — 7 điểm/tuần.</td></tr>
+        <tr><td>2</td><td>Không ảnh hưởng user — không SLO capacity.</td></tr>
+        <tr><td>3</td><td>Pattern quá thưa — không đủ rolling window.</td></tr>
+      </table>
+      <div style="margin-top:16px;text-align:center;font-size:0.88rem;color:var(--ink3)">
+        Rớt 3/3. Batch định kỳ không phù hợp.
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>19 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 20 — Design Rationale
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-20">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Design Rationale</div></div>
+    <div class="reveal reveal-delay-1"><h2>Tại Sao Chọn 3/5?</h2></div>
+    <div class="reveal"><p class="lead">Tiêu chí: (1) Map bottleneck brief (2) Real-time (3) Pattern khác biệt</p></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><th>Service</th><th>Pattern</th><th>Chọn?</th><th>Lý do</th></tr>
+        <tr><td>Payment Gateway</td><td>Daily peak</td><td><span class="tag tag-green"></span></td><td>Bottleneck RDS CPU từ brief</td></tr>
+        <tr><td>Fraud Detector</td><td>Steady 24/7</td><td><span class="tag tag-green"></span></td><td>Real-time? Noisy baseline</td></tr>
+        <tr><td>Ledger</td><td>Burst đêm</td><td><span class="tag tag-green"></span></td><td>Queue backlog 6x, stress test</td></tr>
+        <tr class="row-danger"><td>KYC</td><td>Batch async?</td><td><span class="tag tag-red"></span></td><td>Không real-time?  Cần confirm</td></tr>
+        <tr class="row-danger"><td>Reporting</td><td>Batch định kỳ</td><td><span class="tag tag-red"></span></td><td>Không đủ data point</td></tr>
+      </table>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <div class="card card-warning" style="margin-top:14px">
+        <p><strong> Dựa trên dữ kiện hiện có.</strong> Nếu KYC real-time hoặc Ledger không burst → phải chọn lại.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>20 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 21 — 7 Giả Định Có Evidence
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-21">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Đã Chứng Minh</div></div>
+    <div class="reveal reveal-delay-1"><h2>7 Giả Định Có Evidence</h2></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><th>#</th><th>Giả định</th><th>Evidence</th></tr>
+        <tr><td>1</td><td>3 pattern khác nhau</td><td><span class="tag tag-green">6/6 tests</span></td></tr>
+        <tr><td>2</td><td>Metric priority</td><td><span class="tag tag-green">4 root cause</span></td></tr>
+        <tr><td>3</td><td>Lead time ≥15ph đủ</td><td><span class="tag tag-green">AWS Docs</span></td></tr>
+        <tr><td>4</td><td>Seasonality</td><td><span class="tag tag-green">STL decomposition</span></td></tr>
+        <tr><td>5</td><td>Confidence (100% Precision)</td><td><span class="tag tag-green">Brier=0.032 (3-sigma)</span></td></tr>
+        <tr><td>6</td><td>Onboarding 30ph</td><td><span class="tag tag-green">Pipeline timing</span></td></tr>
+        <tr><td>7</td><td>Cost $0-3</td><td><span class="tag tag-green">Free tier audit</span></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>21 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 22 — Statistical Proof
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-22">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Statistical Proof</div></div>
+    <div class="reveal reveal-delay-1"><h2>6 Tests — 3 Service Khác Nhau</h2></div>
+    <div class="reveal"><p class="lead">Bằng chứng thống kê: Tại sao 3 service này không thể dùng chung 1 rule tĩnh?</p></div>
+    <div class="reveal reveal-delay-2">
+      <table class="tbl">
+        <tr><th>Test</th><th>Kết quả</th><th>Giải thích</th></tr>
+        <tr><td>ANOVA</td><td>F=3234 p≈0 <span class="tag tag-green">PASS</span></td><td>Chứng minh trung bình tải của 3 service hoàn toàn khác biệt.</td></tr>
+        <tr><td>Kruskal-Wallis</td><td>H=2150 p≈0 <span class="tag tag-green">PASS</span></td><td>Chứng minh hình dáng phân phối dữ liệu gốc không giống nhau.</td></tr>
+        <tr><td>KS test (3 cặp)</td><td>3/3 p<0.001 <span class="tag tag-green">PASS</span></td><td>Chứng minh từng cặp service đều có đồ thị lệnh pha nhau rệt.</td></tr>
+        <tr><td>Cross-correlation</td><td>2/3 < 0.3 <span class="tag tag-green">PASS</span></td><td>Tải hoàn toàn độc lập, A tăng đột biến không làm B tăng theo.</td></tr>
+        <tr><td>Peak hour</td><td>9h·18h·23h <span class="tag tag-green">PASS</span></td><td>Giờ cao điểm lệch nhau: sáng, chiều tối, và đêm khuya.</td></tr>
+        <tr><td>Peak/trough</td><td>1.9x·1.0x·15.5x <span class="tag tag-green">PASS</span></td><td>Biên độ dao động khác nhau: cái đều đều, cái thì giật cục.</td></tr>
+      </table>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <div class="card card-success" style="margin-top:14px;text-align:center">
+        <p><strong>6/6 PASS.</strong> <code>evidence_pattern_diversity.json</code></p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>22 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 23 — Metric Priority Chart
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-23">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Metric Priority (1/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> Phương Pháp & Biểu Đồ</h2></div>
+    <div class="reveal"><p class="lead">4 root cause → metric nào là early indicator?</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-2">
+        <div class="card">
+          <h3>4 Root Causes</h3>
+          <table class="tbl">
+            <tr><td>CPU exhaustion</td><td>CPU +15%</td><td>→ CPU</td></tr>
+            <tr><td>Memory leak</td><td>Mem +0.08%/min</td><td>→ Memory</td></tr>
+            <tr><td>Queue backlog</td><td>Queue x3</td><td>→ Queue</td></tr>
+            <tr><td>Connection pool</td><td>Conn -80%</td><td>→ Queue</td></tr>
+          </table>
+          <div style="margin-top:10px;font-size:0.78rem;color:var(--green);font-weight:600"> Đã sửa circular reasoning</div>
+        </div>
+        <div class="card">
+          <div class="img-frame">
+            <img src="tf4-evidence/evidence/metric_priority_multi_root.png" alt="Metric priority multi root analysis">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>23 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 24 — Metric Priority Results (Animated bars)
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-24">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Metric Priority (2/2)</div></div>
+    <div class="reveal reveal-delay-1"><h2> Kết Quả</h2></div>
+    <div class="reveal"><p class="lead">Aggregate rank qua 4 root cause</p></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-2">
+        <div class="card card-success">
+          <div class="metric-row">
+            <div class="metric-rank">#1</div>
+            <div class="metric-bar">
+              <div class="metric-fill" data-width="94%" style="background:var(--grad1)">CPU</div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-rank">#2</div>
+            <div class="metric-bar">
+              <div class="metric-fill" data-width="65%" style="background:linear-gradient(135deg,#f97316,#ea580c)">Queue</div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-rank">#3</div>
+            <div class="metric-bar">
+              <div class="metric-fill" data-width="48%" style="background:var(--grad2)">Latency</div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-rank">#4</div>
+            <div class="metric-bar">
+              <div class="metric-fill" data-width="35%" style="background:linear-gradient(135deg,#fbbf24,#f59e0b)">Memory</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Hệ quả</h3>
+          <p style="font-size:0.88rem;line-height:1.7">
+            CPU = primary.<br>
+            Queue + Latency = cross-validate.<br><br>
+            <code>evidence_metric_priority.json</code>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>24 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 25 — Timeline
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-25">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Timeline</div></div>
+    <div class="reveal reveal-delay-1"><h2>W11-W12 — 2 Tuần</h2></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-2">
+        <div class="card">
+          <h3> AIO</h3>
+          <table class="tbl">
+            <tr><td>T2</td><td>Kickoff + Debrief</td></tr>
+            <tr><td>T3</td><td>Spike + Design</td></tr>
+            <tr><td>T4</td><td>Build core (Engine 100% DONE)</td></tr>
+            <tr><td>T5</td><td><span class="tag tag-red">KÝ + FREEZE + Deploy</span></td></tr>
+            <tr><td>T6</td><td>CDO Integration Support</td></tr>
+            <tr><td>W12</td><td>Chaos + Eval + Pitch</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <h3>️ CDO</h3>
+          <table class="tbl">
+            <tr><td>T2</td><td>Kickoff + Chọn angle</td></tr>
+            <tr><td>T3</td><td>Design platform</td></tr>
+            <tr><td>T4</td><td>Base IaC</td></tr>
+            <tr><td>T5</td><td><span class="tag tag-red">KÝ contracts</span></td></tr>
+            <tr><td>W12</td><td>Integrate + E2E + Pitch</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>25 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 26 — Next Steps
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-26">
+  <div class="content">
+    <div class="reveal"><div class="eyebrow">Next Steps</div></div>
+    <div class="reveal reveal-delay-1"><h2>Tối Nay → Sáng Mai</h2></div>
+    <div class="reveal reveal-delay-2">
+      <div class="grid-2">
+        <div class="card">
+          <h3> Tối nay</h3>
+          <p style="line-height:2">
+             Gửi debrief<br>
+             29 mục confirm<br>
+            ⬜ CDO đọc brief
+          </p>
+        </div>
+        <div class="card">
+          <h3>️ Sáng mai</h3>
+          <p style="line-height:2">
+            ⬜ Mentor confirm → design<br>
+            ✅ Engine 100% Prebuild<br>
+            ⬜ Requirements.md
+
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <div class="card card-warning" style="margin-top:16px;text-align:center">
+        <p><strong style="color:var(--accent)">T5 chiều:</strong> Docs approved + Contracts ký + Engine deployed.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>26 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDE 27 — Q&A
+     ═══════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-27">
+  <div class="grid-pattern"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="content" style="text-align:center">
+    <div class="reveal">
+      <div class="hero-text" style="margin-bottom:24px">Q&A</div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <p style="font-size:1.15rem;color:var(--ink2);margin-bottom:8px">
+        Evidence: <code>tf4-evidence/</code>
+      </p>
+      <p style="font-size:0.95rem;color:var(--ink3)">
+        <code>python3 tf4_evidence.py</code>
+      </p>
+    </div>
+  </div>
+  <div class="slide-footer"><span>TF4 Foresight Lens</span><span>27 / 27</span></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT — Navigation, Animations, Progress
+     ═══════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  const navDotsContainer = document.getElementById('navDots');
+  const total = slides.length;
+  let currentSlide = 0;
+
+  // ── Build nav dots ──
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    dot.addEventListener('click', () => {
+      slides[i].scrollIntoView({ behavior: 'smooth' });
+    });
+    navDotsContainer.appendChild(dot);
+  });
+  const navDots = navDotsContainer.querySelectorAll('.nav-dot');
+
+  // ── Intersection Observer for slide tracking ──
+  const slideObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(slides).indexOf(entry.target);
+        currentSlide = idx;
+        counter.textContent = `${idx + 1} / ${total}`;
+        progressBar.style.width = `${((idx + 1) / total) * 100}%`;
+
+        navDots.forEach((d, j) => {
+          d.classList.toggle('active', j === idx);
+        });
+      }
+    });
+  }, { threshold: 0.55 });
+
+  slides.forEach(s => slideObserver.observe(s));
+
+  // ── Reveal animations on scroll ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ── Animated metric bars ──
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const fills = entry.target.querySelectorAll('.metric-fill[data-width]');
+        fills.forEach((fill, i) => {
+          setTimeout(() => {
+            fill.style.width = fill.dataset.width;
+          }, i * 150);
+        });
+        barObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.metric-row').forEach(row => {
+    const parent = row.closest('.card');
+    if (parent) barObserver.observe(parent);
+  });
+
+  // ── Keyboard navigation ──
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      if (currentSlide < total - 1) {
+        slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (currentSlide > 0) {
+        slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    if (e.key === 'Home') {
+      e.preventDefault();
+      slides[0].scrollIntoView({ behavior: 'smooth' });
+    }
+    if (e.key === 'End') {
+      e.preventDefault();
+      slides[total - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+})();
+</script>
+</body>
+</html>

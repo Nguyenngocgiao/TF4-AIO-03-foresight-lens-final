@@ -1,0 +1,11 @@
+{
+  "method": "Timed pipeline execution (simulated, scaled to realistic I/O)",
+  "steps": {
+    "register": "~5 minutes (manual input + config gen)",
+    "load_7d_data": "~10 minutes (read 30K data points from S3/TSDB)",
+    "train_baseline": "~10 minutes (EWMA + Isolation Forest on 7d data)",
+    "validate": "~3 minutes (run test predictions + check results)"
+  },
+  "total_estimated": "28-30 minutes per service",
+  "production_note": "With real data volume (6 months, 50K events/sec), onboarding may take 2-4 hours. ADR to note."
+}

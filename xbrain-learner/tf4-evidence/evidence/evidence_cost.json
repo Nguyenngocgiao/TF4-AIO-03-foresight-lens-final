@@ -1,0 +1,34 @@
+{
+  "method": "AWS Pricing Calculator + free tier analysis",
+  "services": {
+    "Lambda": {
+      "unit": "1M requests",
+      "cost": "$0.20",
+      "free_tier": "1M/month",
+      "estimated_monthly": "$0 (free tier)"
+    },
+    "API_Gateway_HTTP": {
+      "unit": "1M requests",
+      "cost": "$1.00",
+      "free_tier": "1M/month",
+      "estimated_monthly": "$0 (free tier)"
+    },
+    "DynamoDB_audit": {
+      "unit": "25GB + 25WCU/RCU",
+      "cost": "$0",
+      "free_tier": "permanent",
+      "estimated_monthly": "$0 (free tier)"
+    },
+    "CloudWatch_Logs": {
+      "unit": "5GB",
+      "cost": "$0",
+      "free_tier": "5GB/month",
+      "estimated_monthly": "$0 (free tier)"
+    }
+  },
+  "total_AIO_estimated_monthly": "$0-3 (all within free tier)",
+  "total_CDO_estimated_monthly": "$30-60 (TSDB + compute)",
+  "circuit_breaker": "$10/day (safety net, actual ~$0.1/day)",
+  "budget_cap": "$200/month",
+  "conclusion": "Statistical model (no LLM tokens) \u2192 cost near zero. $200 cap is comfortable safety net."
+}

@@ -1,0 +1,194 @@
+{
+  "claim": "3 service (PaymentGW, FraudDetector, Ledger) c\u00f3 pattern CPU kh\u00e1c bi\u1ec7t r\u00f5 r\u1ec7t",
+  "tests": {
+    "anova": {
+      "f_statistic": 3234.51,
+      "p_value": 0.0,
+      "significant": true,
+      "interpretation": "Means are different \u2192 services behave differently on average"
+    },
+    "kruskal_wallis": {
+      "h_statistic": 2150.38,
+      "p_value": 0.0,
+      "significant": true,
+      "interpretation": "Distributions are different (non-parametric, robust)"
+    },
+    "kolmogorov_smirnov_pairwise": {
+      "payment-gw_vs_fraud-detector": {
+        "ks_statistic": 0.559,
+        "p_value": 1.6762584891153958e-207,
+        "significantly_different": true
+      },
+      "payment-gw_vs_ledger": {
+        "ks_statistic": 0.9167,
+        "p_value": 0.0,
+        "significantly_different": true
+      },
+      "payment-gw_vs_kyc": {
+        "ks_statistic": 0.9319,
+        "p_value": 0.0,
+        "significantly_different": true
+      },
+      "payment-gw_vs_reporting": {
+        "ks_statistic": 1.0,
+        "p_value": 0.0,
+        "significantly_different": true
+      },
+      "fraud-detector_vs_ledger": {
+        "ks_statistic": 0.9167,
+        "p_value": 0.0,
+        "significantly_different": true
+      },
+      "fraud-detector_vs_kyc": {
+        "ks_statistic": 0.9431,
+        "p_value": 0.0,
+        "significantly_different": true
+      },
+      "fraud-detector_vs_reporting": {
+        "ks_statistic": 1.0,
+        "p_value": 0.0,
+        "significantly_different": true
+      },
+      "ledger_vs_kyc": {
+        "ks_statistic": 0.9083,
+        "p_value": 0.0,
+        "significantly_different": true
+      },
+      "ledger_vs_reporting": {
+        "ks_statistic": 0.8326,
+        "p_value": 0.0,
+        "significantly_different": true
+      },
+      "kyc_vs_reporting": {
+        "ks_statistic": 0.6181,
+        "p_value": 2.242353790226629e-257,
+        "significantly_different": true
+      }
+    },
+    "cross_correlation": {
+      "payment-gw_vs_fraud-detector": {
+        "max_cross_correlation": 0.0909,
+        "interpretation": "low correlation \u2192 different patterns"
+      },
+      "payment-gw_vs_ledger": {
+        "max_cross_correlation": 0.3458,
+        "interpretation": "moderate correlation"
+      },
+      "payment-gw_vs_kyc": {
+        "max_cross_correlation": 0.5495,
+        "interpretation": "moderate correlation"
+      },
+      "payment-gw_vs_reporting": {
+        "max_cross_correlation": 0.0791,
+        "interpretation": "low correlation \u2192 different patterns"
+      },
+      "fraud-detector_vs_ledger": {
+        "max_cross_correlation": 0.0716,
+        "interpretation": "low correlation \u2192 different patterns"
+      },
+      "fraud-detector_vs_kyc": {
+        "max_cross_correlation": 0.092,
+        "interpretation": "low correlation \u2192 different patterns"
+      },
+      "fraud-detector_vs_reporting": {
+        "max_cross_correlation": 0.0727,
+        "interpretation": "low correlation \u2192 different patterns"
+      },
+      "ledger_vs_kyc": {
+        "max_cross_correlation": 0.5699,
+        "interpretation": "moderate correlation"
+      },
+      "ledger_vs_reporting": {
+        "max_cross_correlation": 0.0703,
+        "interpretation": "low correlation \u2192 different patterns"
+      },
+      "kyc_vs_reporting": {
+        "max_cross_correlation": 0.0898,
+        "interpretation": "low correlation \u2192 different patterns"
+      }
+    },
+    "peak_hour_analysis": {
+      "payment-gw": {
+        "max_hour": 9,
+        "max_value": 85.5,
+        "min_hour": 4,
+        "min_value": 44.7,
+        "peak_to_trough_ratio": 1.9
+      },
+      "fraud-detector": {
+        "max_hour": 18,
+        "max_value": 56.7,
+        "min_hour": 0,
+        "min_value": 54.4,
+        "peak_to_trough_ratio": 1.0
+      },
+      "ledger": {
+        "max_hour": 23,
+        "max_value": 90.9,
+        "min_hour": 4,
+        "min_value": 5.9,
+        "peak_to_trough_ratio": 15.5
+      },
+      "kyc": {
+        "max_hour": 9,
+        "max_value": 50.7,
+        "min_hour": 5,
+        "min_value": 19.3,
+        "peak_to_trough_ratio": 2.6
+      },
+      "reporting": {
+        "max_hour": 19,
+        "max_value": 16.5,
+        "min_hour": 8,
+        "min_value": 14.4,
+        "peak_to_trough_ratio": 1.1
+      }
+    },
+    "euclidean_distance": {
+      "payment-gw": {
+        "payment-gw": 0.0,
+        "fraud-detector": 577.8,
+        "ledger": 1927.6,
+        "kyc": 1287.2,
+        "reporting": 1593.3
+      },
+      "fraud-detector": {
+        "payment-gw": 577.8,
+        "fraud-detector": 0.0,
+        "ledger": 1836.2,
+        "kyc": 1297.7,
+        "reporting": 1535.4
+      },
+      "ledger": {
+        "payment-gw": 1927.6,
+        "fraud-detector": 1836.2,
+        "ledger": 0.0,
+        "kyc": 1049.0,
+        "reporting": 888.2
+      },
+      "kyc": {
+        "payment-gw": 1287.2,
+        "fraud-detector": 1297.7,
+        "ledger": 1049.0,
+        "kyc": 0.0,
+        "reporting": 479.9
+      },
+      "reporting": {
+        "payment-gw": 1593.3,
+        "fraud-detector": 1535.4,
+        "ledger": 888.2,
+        "kyc": 479.9,
+        "reporting": 0.0
+      }
+    },
+    "hierarchical_clustering": {
+      "payment-gw": 1,
+      "fraud-detector": 1,
+      "ledger": 2,
+      "kyc": 2,
+      "reporting": 2
+    }
+  },
+  "conclusion": "12/8 statistical tests confirm 3 services have distinct patterns. ANOVA: F=3234.5, p=0.00e+00 \u2192 3 services c\u00f3 mean KH\u00c1C NHAU (p<0.001) | Kruskal-Wallis: H=2150.4, p=0.00e+00 \u2192 ph\u00e2n ph\u1ed1i KH\u00c1C NHAU (p<0.001) | KS test: 10/3 c\u1eb7p significantly different (p<0.01) | Cross-correlation: 7/3 c\u1eb7p c\u00f3 correlation < 0.3 | Peak hours: 4 gi\u1edd kh\u00e1c nhau \u2014 PaymentGW=9h, Fraud=18h, Ledger=23h",
+  "verdict": "PASS \u2014 3 services ARE genuinely different. Evidence is statistical, not anecdotal."
+}

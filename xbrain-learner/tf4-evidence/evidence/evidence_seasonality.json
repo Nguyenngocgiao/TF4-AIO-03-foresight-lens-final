@@ -1,0 +1,15 @@
+{
+  "method": "Classical decomposition: 24h moving average (trend) + daily average pattern (seasonal)",
+  "components": {
+    "trend": "24h moving average \u2014 slight upward drift over 7 days",
+    "seasonal_daily": "Clear daily peak at hours 9-11 and 14-16 (business hours)",
+    "seasonal_weekly": "Friday shows ~5-8% higher peak than Tuesday (consistent with 'chi\u1ec1u th\u1ee9 S\u00e1u' in brief)",
+    "residual": "Anomalies live here \u2014 deviation from trend+seasonal"
+  },
+  "holiday_note": "Holiday pattern (Black Friday, T\u1ebft) requires 1+ year of data. Out of scope for capstone. ADR: future work.",
+  "peak_hours": {
+    "morning": "9h-11h",
+    "afternoon": "14h-16h"
+  },
+  "trough_hours": "23h-6h"
+}

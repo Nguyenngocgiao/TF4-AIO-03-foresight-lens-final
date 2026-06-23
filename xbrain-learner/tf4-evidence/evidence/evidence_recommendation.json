@@ -1,0 +1,14 @@
+{
+  "method": "Rule-based mapping from detected metric to actionable recommendation satisfying all 5 required components.",
+  "requirement_met": "action verb + target + from->to + confidence + evidence link",
+  "test_cases": [
+    {
+      "metric": "cpu_pct",
+      "recommendation": "SCALE_UP (Action) RDS Database (Target) from db.r5.large to db.r5.xlarge (From->To). Confidence: 0.85. Evidence: https://obs.internal/tnt-1?metric=cpu_pct"
+    },
+    {
+      "metric": "queue_depth",
+      "recommendation": "INCREASE (Action) SQS Worker Concurrency (Target) from 10 to 25 (From->To). Confidence: 0.85. Evidence: https://obs.internal/tnt-1?metric=queue_depth"
+    }
+  ]
+}

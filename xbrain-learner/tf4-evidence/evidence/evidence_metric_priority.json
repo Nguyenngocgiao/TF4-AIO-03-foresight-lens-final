@@ -1,0 +1,86 @@
+{
+  "method": "Multi-root-cause injection: 4 different failure modes \u2192 measure which metric detects first across all",
+  "circular_reasoning_fix": "Previous method injected only CPU drift (circular). Now inject 4 independent root causes.",
+  "root_causes": [
+    {
+      "root_cause": "CPU exhaustion",
+      "inject_target": "CPU +15% gradual over 12h",
+      "rank": [
+        "latency_p99",
+        "queue_depth",
+        "cpu_pct",
+        "mem_pct"
+      ],
+      "detection_times": {
+        "latency_p99": 722,
+        "queue_depth": 726,
+        "cpu_pct": 835,
+        "mem_pct": 840
+      }
+    },
+    {
+      "root_cause": "Memory leak",
+      "inject_target": "Memory +0.08%/min (0.03% for followers)",
+      "rank": [
+        "latency_p99",
+        "queue_depth",
+        "mem_pct",
+        "cpu_pct"
+      ],
+      "detection_times": {
+        "latency_p99": 722,
+        "queue_depth": 726,
+        "mem_pct": 781,
+        "cpu_pct": 835
+      }
+    },
+    {
+      "root_cause": "Queue backlog",
+      "inject_target": "Queue depth \u00d73 (0.15/min), wide sigma",
+      "rank": [
+        "latency_p99",
+        "queue_depth",
+        "cpu_pct",
+        "mem_pct"
+      ],
+      "detection_times": {
+        "latency_p99": 721,
+        "queue_depth": 726,
+        "cpu_pct": 835,
+        "mem_pct": 840
+      }
+    },
+    {
+      "root_cause": "Connection pool leak",
+      "inject_target": "Queue depth \u00d75 (0.12/min)",
+      "rank": [
+        "latency_p99",
+        "queue_depth",
+        "cpu_pct",
+        "mem_pct"
+      ],
+      "detection_times": {
+        "latency_p99": 722,
+        "queue_depth": 726,
+        "cpu_pct": 835,
+        "mem_pct": 840
+      }
+    }
+  ],
+  "aggregate_first_rank_count": {
+    "latency_p99": 4
+  },
+  "average_rank": {
+    "cpu_pct": 3.25,
+    "mem_pct": 3.75,
+    "queue_depth": 2.0,
+    "latency_p99": 1.0
+  },
+  "final_rank": [
+    "latency_p99",
+    "queue_depth",
+    "cpu_pct",
+    "mem_pct"
+  ],
+  "conclusion": "Across 4 root causes, aggregate rank: latency_p99 \u2192 queue_depth \u2192 cpu_pct \u2192 mem_pct. latency_p99 is #1 in 4/4 root causes."
+}
