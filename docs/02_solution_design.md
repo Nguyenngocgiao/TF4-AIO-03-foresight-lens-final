@@ -6,17 +6,9 @@
 
 ## 1. High-level architecture
 
-```mermaid
-graph LR
-    A[Telemetry Data] -->|HTTP POST| B[API Gateway]
-    B --> C[FastAPI AI Engine]
-    C -->|Calculate 3-Sigma| D{Anomaly Detected?}
-    D -- Yes --> E[Generate Suggestion]
-    D -- No --> F[Normal State]
-    E --> G[Audit Logger]
-    F --> G
-    G -->|Write JSONL| H[(S3 / CloudWatch)]
-```
+![Solution Design](../diagrams/02_solution_design.png)
+
+*(Sơ đồ có thể chỉnh sửa: [02_solution_design.drawio](../diagrams/02_solution_design.drawio))*
 
 *Diagram caption: Luồng xử lý một chiều, Engine nhận dữ liệu chuỗi thời gian, áp dụng thuật toán Rolling 3-Sigma để tìm bất thường và log lại mọi quyết định.*
 

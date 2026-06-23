@@ -56,25 +56,9 @@
 
 ## Deployment topology diagram
 
-```mermaid
-graph TB
-    subgraph "VPC Task Force 4"
-        subgraph "Private subnet"
-            ALB[Internal ALB]
-            ECS[ECS Fargate Tasks × min 2]
-            ALB -->|Forward to FastAPI| ECS
-        end
-    end
+![Deployment Topology](../diagrams/deployment_topology.png)
 
-    subgraph "CDO Platforms"
-        CDO1[CDO-Payment]
-        CDO2[CDO-Fraud]
-        CDO3[CDO-Ledger]
-    end
-    CDO1 -->|POST /v1/detect| ALB
-    CDO2 -->|POST /v1/detect| ALB
-    CDO3 -->|POST /v1/detect| ALB
-```
+*(Sơ đồ có thể chỉnh sửa: [deployment_topology.drawio](../diagrams/deployment_topology.drawio))*
 
 ## Per-CDO platform pointer
 

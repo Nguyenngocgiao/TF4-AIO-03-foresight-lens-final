@@ -119,32 +119,9 @@
 
 Pattern bắt buộc cho mọi engine thực hiện action thật trên hệ thống (không phải chỉ suggest):
 
-```mermaid
-sequenceDiagram
-    Detector->>Engine: anomaly detected
-    Engine->>Engine: 1. Match runbook
-    Engine->>Engine: 2. Check blast-radius config
-    alt Exceeds blast-radius
-        Engine->>Escalation: Halt + page human
-    else Within blast-radius
-        Engine->>Sandbox: 3. Dry-run action
-        alt Dry-run fail
-            Engine->>Escalation: Refuse + log
-        else Dry-run pass
-            Engine->>Target: 4. Execute action
-            Engine->>Verifier: 5. Verify (metric check, N seconds)
-            alt Verify fail
-                Verifier->>Target: 6. Auto rollback
-                Engine->>CircuitBreaker: increment failure count
-                alt Consecutive M failures
-                    CircuitBreaker->>Engine: HALT automation
-                end
-            else Verify pass
-                Engine->>Audit: Log success
-            end
-        end
-    end
-```
+![Closed-loop Safety Pattern](../diagrams/03_ai_action_loop.png)
+
+*(Sơ đồ có thể chỉnh sửa: [03_ai_action_loop.drawio](../diagrams/03_ai_action_loop.drawio))*
 
 #### 5.6.1 Five sub-checkpoints (mọi action phải qua tất cả 5)
 
