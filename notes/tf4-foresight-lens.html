@@ -817,7 +817,7 @@ h3 {
       <div class="card" style="margin-top:16px">
         <h3>CPU Comparison</h3>
         <div class="img-frame" style="margin-top:10px">
-          <img src="evidence/service_comparison_cpu.png" alt="CPU comparison across 3 services">
+          <img src="../tf4-evidence/evidence/service_comparison_cpu.png" alt="CPU comparison across 3 services">
         </div>
       </div>
     </div>
@@ -835,7 +835,7 @@ h3 {
     <div class="reveal"><p class="lead">Cổng thanh toán — route giao dịch đến ngân hàng.</p></div>
     <div class="reveal reveal-delay-2">
       <div class="img-frame">
-        <img src="evidence/service_payment-gw_profile.png" alt="PaymentGW 24h metric profile">
+        <img src="../tf4-evidence/evidence/service_payment-gw_profile.png" alt="PaymentGW 24h metric profile">
       </div>
     </div>
   </div>
@@ -872,7 +872,7 @@ h3 {
     <div class="reveal"><p class="lead">Engine phát hiện gian lận. Mỗi giao dịch đều qua đây.</p></div>
     <div class="reveal reveal-delay-2">
       <div class="img-frame">
-        <img src="evidence/service_fraud-detector_profile.png" alt="FraudDetector 24h metric profile">
+        <img src="../tf4-evidence/evidence/service_fraud-detector_profile.png" alt="FraudDetector 24h metric profile">
       </div>
     </div>
   </div>
@@ -909,7 +909,7 @@ h3 {
     <div class="reveal"><p class="lead">Sổ cái kế toán — đối soát giao dịch cuối ngày.</p></div>
     <div class="reveal reveal-delay-2">
       <div class="img-frame">
-        <img src="evidence/service_ledger_profile.png" alt="Ledger 24h metric profile">
+        <img src="../tf4-evidence/evidence/service_ledger_profile.png" alt="Ledger 24h metric profile">
       </div>
     </div>
   </div>
@@ -945,7 +945,7 @@ h3 {
     <div class="reveal reveal-delay-1"><h2>Algorithm Evaluation: Tìm kiếm thuật toán tối ưu</h2></div>
     <div class="reveal"><p class="lead">Đánh giá đối chứng 3 thuật toán trên 100 sample windows có nhiễu (Noise) và đột biến (Drift)</p></div>
     <div class="reveal reveal-delay-2" style="text-align:center; margin-top:20px;">
-      <img src="evidence/algorithm_comparison.png" alt="Algorithm Evaluation" style="max-height:220px; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+      <img src="../tf4-evidence/evidence/algorithm_comparison.png" alt="Algorithm Evaluation" style="max-height:220px; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
     </div>
     <div class="reveal reveal-delay-3">
       <div class="grid-3" style="margin-top:20px;">
@@ -1022,7 +1022,7 @@ h3 {
         </div>
         <div class="card">
           <div class="img-frame">
-            <img src="evidence/metric_priority_multi_root.png" alt="Metric priority multi root analysis">
+            <img src="../tf4-evidence/evidence/metric_priority_multi_root.png" alt="Metric priority multi root analysis">
           </div>
         </div>
       </div>
@@ -1091,13 +1091,13 @@ h3 {
     <div class="reveal reveal-delay-2">
       <table class="tbl" style="font-size:0.8rem">
         <tr><th style="width:5%">#</th><th style="width:25%">Giả định</th><th style="width:20%">Evidence (Click)</th><th style="width:50%">Giải thích ngắn gọn</th></tr>
-        <tr><td>1</td><td>3 pattern khác nhau</td><td><a href="evidence/evidence_pattern_diversity.json" target="_blank" class="tag tag-green">6/6 tests</a></td><td>Payment (Spiky), Fraud (Bursty), Ledger (Batch) độc lập thống kê hoàn toàn, p-value &lt; 0.05.</td></tr>
-        <tr><td>2</td><td>Metric priority</td><td><a href="evidence/evidence_metric_priority.json" target="_blank" class="tag tag-green">4 root cause</a></td><td>CPU luôn bão hòa trước Memory/Network trong các sự cố quá tải. Chọn CPU là metric dẫn đường (Leading Indicator).</td></tr>
-        <tr><td>3</td><td>Lead time ≥15ph đủ</td><td><a href="evidence/evidence_lead_time.json" target="_blank" class="tag tag-green">AWS Docs</a></td><td>Quy trình Scale ECS task hay Scale RDS IOPS thường mất 5-10 phút. Lead time 15 phút là an toàn.</td></tr>
-        <tr><td>4</td><td>Seasonality</td><td><a href="evidence/evidence_seasonality.json" target="_blank" class="tag tag-green">STL decomposition</a></td><td>Metric có tính chu kỳ ngày/tuần. Engine phải học baseline theo khung giờ (Time-of-Day).</td></tr>
-        <tr><td>5</td><td>Confidence (100% Precision)</td><td><a href="evidence/evidence_confidence_threshold.json" target="_blank" class="tag tag-green">Brier=0.032</a></td><td>Với ngưỡng STL Residual, tỉ lệ False Positive = 0 (báo động nào cũng đúng), đánh đổi là bỏ lọt ~15% dị thường nhỏ.</td></tr>
-        <tr><td>6</td><td>Onboarding 30ph</td><td><a href="evidence/evidence_onboarding.json" target="_blank" class="tag tag-green">Pipeline timing</a></td><td>Cấu trúc không xâm lấn. Client chỉ cần emit log, AIO cần 30p để tích hợp luồng Telemetry.</td></tr>
-        <tr><td>7</td><td>Cost $0-3</td><td><a href="evidence/evidence_cost.json" target="_blank" class="tag tag-green">Free tier audit</a></td><td>Tối ưu kiến trúc ECS Fargate. Không bị quá tải chi phí duy trì. Ngân sách $200 hoàn toàn dư dả.</td></tr>
+        <tr><td>1</td><td>3 pattern khác nhau</td><td><a href="../tf4-evidence/evidence/evidence_pattern_diversity.json" target="_blank" class="tag tag-green">6/6 tests</a></td><td>Payment (Spiky), Fraud (Bursty), Ledger (Batch) độc lập thống kê hoàn toàn, p-value &lt; 0.05.</td></tr>
+        <tr><td>2</td><td>Metric priority</td><td><a href="../tf4-evidence/evidence/evidence_metric_priority.json" target="_blank" class="tag tag-green">4 root cause</a></td><td>CPU luôn bão hòa trước Memory/Network trong các sự cố quá tải. Chọn CPU là metric dẫn đường (Leading Indicator).</td></tr>
+        <tr><td>3</td><td>Lead time ≥15ph đủ</td><td><a href="../tf4-evidence/evidence/evidence_lead_time.json" target="_blank" class="tag tag-green">AWS Docs</a></td><td>Quy trình Scale ECS task hay Scale RDS IOPS thường mất 5-10 phút. Lead time 15 phút là an toàn.</td></tr>
+        <tr><td>4</td><td>Seasonality</td><td><a href="../tf4-evidence/evidence/evidence_seasonality.json" target="_blank" class="tag tag-green">STL decomposition</a></td><td>Metric có tính chu kỳ ngày/tuần. Engine phải học baseline theo khung giờ (Time-of-Day).</td></tr>
+        <tr><td>5</td><td>Confidence (100% Precision)</td><td><a href="../tf4-evidence/evidence/evidence_confidence_threshold.json" target="_blank" class="tag tag-green">Brier=0.032</a></td><td>Với ngưỡng STL Residual, tỉ lệ False Positive = 0 (báo động nào cũng đúng), đánh đổi là bỏ lọt ~15% dị thường nhỏ.</td></tr>
+        <tr><td>6</td><td>Onboarding 30ph</td><td><a href="../tf4-evidence/evidence/evidence_onboarding.json" target="_blank" class="tag tag-green">Pipeline timing</a></td><td>Cấu trúc không xâm lấn. Client chỉ cần emit log, AIO cần 30p để tích hợp luồng Telemetry.</td></tr>
+        <tr><td>7</td><td>Cost $0-3</td><td><a href="../tf4-evidence/evidence/evidence_cost.json" target="_blank" class="tag tag-green">Free tier audit</a></td><td>Tối ưu kiến trúc ECS Fargate. Không bị quá tải chi phí duy trì. Ngân sách $200 hoàn toàn dư dả.</td></tr>
       </table>
     </div>
   </div>
