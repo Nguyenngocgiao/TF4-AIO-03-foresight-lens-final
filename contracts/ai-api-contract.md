@@ -125,5 +125,4 @@
 
 ## Open questions
 
-- [ ] Q1: Có cần endpoint streaming/SSE cho realtime monitoring không?
-- [ ] Q2: Webhook callback từ AI sang CDO khi async - có cần không?
+- [ ] Q1: Webhook callback từ AI sang CDO khi async - có cần không?

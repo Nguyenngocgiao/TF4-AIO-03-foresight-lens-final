@@ -23,21 +23,21 @@
 | **Cluster** | `tf-4-aiops-cluster` |
 | **Service name** | `foresight-lens-engine` |
 | **Image source** | ECR repo URI + image tag |
-| **CPU per task** | 1024 (1 vCPU) |
-| **Memory per task** | 2048 MB |
+| **CPU per task** | 512 (0.5 vCPU) |
+| **Memory per task** | 1024 MB |
 
 ## Scaling
 
 | Aspect | Value |
 |---|---|
-| **Replicas** | min 2, max 10 |
+| **Replicas** | min 2, max 4 |
 | **Autoscale trigger 1** | Target CPU 70% |
 | **Autoscale trigger 2** | Target request count 1000 per task |
 | **Scale-up cooldown** | 60 giây |
 
 ## Secrets
 
-> Hệ thống sử dụng thuật toán Statistical 3-Sigma, KHÔNG dùng Bedrock LLM. Do đó, KHÔNG yêu cầu API Key của Bedrock.
+> Hệ thống sử dụng thuật toán Time-series Anomaly Detection (Statistical/ML thuần), KHÔNG dùng Bedrock LLM. Do đó, KHÔNG yêu cầu API Key của Bedrock. Việc chọn thuật toán cụ thể sẽ được ghi nhận trong ADR (Architecture Decision Record) sau khi audit dữ liệu từ CDO.
 
 | Secret name | Source |
 |---|---|
@@ -60,6 +60,11 @@
 
 *(Sơ đồ có thể chỉnh sửa: [deployment_topology.drawio](../diagrams/deployment_topology.drawio))*
 
+## Model Training Topology (Design-only)
+
+Do tính chất bài toán TF4, kiến trúc triển khai bắt buộc chia làm hai ranh giới. CDO **chỉ chịu trách nhiệm host phần Model Serving** (FastAPI phía trên). 
+Quá trình **Model Training** (Học baseline cho từng service) sẽ được thiết kế trên giấy: chạy batch job qua AWS SageMaker hoặc AWS Batch 1 lần/tuần do nhóm AI tự trigger. Nhóm CDO không cần setup hạ tầng training này.
+
 ## Per-CDO platform pointer
 
 | CDO platform | Endpoint URL | Auth |
@@ -67,6 +72,47 @@
 | CDO-Payment | `https://ai-engine.tf-4.internal/` | IAM SigV4 |
 | CDO-Fraud | (same - shared) | IAM SigV4 |
 | CDO-Ledger | (same - shared) | IAM SigV4 |
+
+## Rollout strategy: Canary
+
+| Step | Traffic | Interval |
+|---|---|---|
+| 1 | 10% | 5 phút |
+| 2 | 50% | 5 phút |
+| 3 | 100% | - |
+
+**Abort criteria** (bất kỳ điều kiện trigger → auto rollback ngay):
+- Error rate > 1%
+- P99 latency > 800 ms
+- Cảnh báo "Capacity Exhaustion" sai lệch > 15% (Custom cho TF4)
+
+## Rollback
+
+| Aspect | Value |
+|---|---|
+| **Primary method** | ArgoCD rollback to previous git SHA |
+| **Secondary method** | ECS service revert (manual) |
+| **Target RTO** | < 60 giây |
+| **Auto-trigger** | Yes (khi abort criteria met trong canary rollout) |
+
+## Health check
+
+| Field | Value |
+|---|---|
+| **Path** | `/health` |
+| **Port** | 8080 |
+| **Interval** | 30 giây |
+| **Healthy threshold** | 2 consecutive 200 |
+| **Unhealthy threshold** | 3 consecutive non-200 |
+
+## Observability
+
+| Aspect | Configuration |
+|---|---|
+| **OTel endpoint** | collector URL per CDO platform (config qua env var) |
+| **Log destination** | CloudWatch Logs (retention 14 ngày) |
+| **Metrics** | Prometheus / CloudWatch |
+| **Traces** | OpenTelemetry → AWS X-Ray |
 
 ## Failure modes & response
 
