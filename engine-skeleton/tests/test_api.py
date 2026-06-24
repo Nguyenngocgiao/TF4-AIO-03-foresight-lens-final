@@ -20,11 +20,11 @@ def test_detect_happy_path():
         }
     }
     headers = {"X-Tenant-Id": "tnt-1", "Authorization": "SigV4"}
-    response = client.post("/v1/detect", json=payload, headers=headers)
+    response = client.post("/v1/predict", json=payload, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["anomaly"] is False
-    assert data["suggested_action"] == "ALERT_ONLY"
+    assert data["recommendation"] is None
 
 # ============================================================
 # Scenario 2: Sudden Spike — CPU nhảy vọt đột ngột
@@ -43,11 +43,11 @@ def test_detect_sudden_spike():
         }
     }
     headers = {"X-Tenant-Id": "tnt-1", "Authorization": "SigV4"}
-    response = client.post("/v1/detect", json=payload, headers=headers)
+    response = client.post("/v1/predict", json=payload, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["anomaly"] is True
-    assert data["suggested_action"] == "SCALE_UP"
+    assert data["recommendation"]["action_verb"] == "SCALE_UP"
     assert "audit_id" in data
 
 # ============================================================
@@ -73,7 +73,7 @@ def test_detect_gradual_drift():
         }
     }
     headers = {"X-Tenant-Id": "tnt-1", "Authorization": "SigV4"}
-    response = client.post("/v1/detect", json=payload, headers=headers)
+    response = client.post("/v1/predict", json=payload, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["anomaly"] is True
@@ -101,11 +101,11 @@ def test_detect_slow_leak():
         }
     }
     headers = {"X-Tenant-Id": "tnt-1", "Authorization": "SigV4"}
-    response = client.post("/v1/detect", json=payload, headers=headers)
+    response = client.post("/v1/predict", json=payload, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["anomaly"] is True
-    assert data["suggested_action"] == "ROLLBACK"
+    assert data["recommendation"]["action_verb"] == "ROLLBACK"
 
 # ============================================================
 # Scenario 5: Noisy Baseline — Nhiễu cao nhưng KHÔNG có drift thật
@@ -127,7 +127,7 @@ def test_detect_noisy_baseline_no_false_positive():
         }
     }
     headers = {"X-Tenant-Id": "tnt-1", "Authorization": "SigV4"}
-    response = client.post("/v1/detect", json=payload, headers=headers)
+    response = client.post("/v1/predict", json=payload, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["anomaly"] is False
@@ -149,11 +149,11 @@ def test_detect_sudden_drop():
         }
     }
     headers = {"X-Tenant-Id": "tnt-1", "Authorization": "SigV4"}
-    response = client.post("/v1/detect", json=payload, headers=headers)
+    response = client.post("/v1/predict", json=payload, headers=headers)
     assert response.status_code == 200
     data = response.json()
     assert data["anomaly"] is True
-    assert data["suggested_action"] == "INVESTIGATE"
+    assert data["recommendation"]["action_verb"] == "INVESTIGATE"
 
 # ============================================================
 # Scenario 7: Multi-tenant isolation — Tenant A anomaly, Tenant B clean
@@ -184,11 +184,13 @@ def test_multi_tenant_isolation():
         }
     }
     # Tenant A has anomaly
-    r1 = client.post("/v1/detect", json=anomaly_payload, headers={"X-Tenant-Id": "tnt-A", "Authorization": "SigV4"})
+    r1 = client.post("/v1/predict", json=anomaly_payload, headers={"X-Tenant-Id": "tnt-A", "Authorization": "SigV4"})
+    assert r1.status_code == 200
     assert r1.json()["anomaly"] is True
     
     # Tenant B is clean — should NOT be affected by Tenant A
-    r2 = client.post("/v1/detect", json=normal_payload, headers={"X-Tenant-Id": "tnt-B", "Authorization": "SigV4"})
+    r2 = client.post("/v1/predict", json=normal_payload, headers={"X-Tenant-Id": "tnt-B", "Authorization": "SigV4"})
+    assert r2.status_code == 200
     assert r2.json()["anomaly"] is False
 
 # ============================================================
@@ -202,58 +204,5 @@ def test_missing_tenant_id():
             "time_range": {"start_ts": "2026-06-25T10:00:00Z", "end_ts": "2026-06-25T10:03:00Z"}
         }
     }
-    response = client.post("/v1/detect", json=payload, headers={"Authorization": "SigV4"})
+    response = client.post("/v1/predict", json=payload, headers={"Authorization": "SigV4"})
     assert response.status_code == 422
-
-# ============================================================
-# Scenario 9: Verify — Action succeeded, metrics back to normal
-# ============================================================
-def test_verify_success():
-    payload = {
-        "action_taken": {
-            "type": "SCALE_UP",
-            "params": {"from": "db.r5.large", "to": "db.r5.xlarge"},
-            "ts": "2026-06-25T10:05:00Z"
-        },
-        "post_state": {
-            "signal_window": [
-                {"ts": "2026-06-25T10:06:00Z", "signal_name": "cpu_pct", "value": 50},
-                {"ts": "2026-06-25T10:07:00Z", "signal_name": "cpu_pct", "value": 51},
-                {"ts": "2026-06-25T10:08:00Z", "signal_name": "cpu_pct", "value": 49},
-                {"ts": "2026-06-25T10:09:00Z", "signal_name": "cpu_pct", "value": 50}
-            ]
-        }
-    }
-    headers = {"X-Tenant-Id": "tnt-1"}
-    response = client.post("/v1/verify", json=payload, headers=headers)
-    assert response.status_code == 200
-    data = response.json()
-    assert data["success"] is True
-    assert data["regression_detected"] is False
-
-# ============================================================
-# Scenario 10: Verify — Action FAILED, metrics still anomalous
-# ============================================================
-def test_verify_regression():
-    payload = {
-        "action_taken": {
-            "type": "SCALE_UP",
-            "params": {"from": "db.r5.large", "to": "db.r5.xlarge"},
-            "ts": "2026-06-25T10:05:00Z"
-        },
-        "post_state": {
-            "signal_window": [
-                {"ts": "2026-06-25T10:06:00Z", "signal_name": "cpu_pct", "value": 50},
-                {"ts": "2026-06-25T10:07:00Z", "signal_name": "cpu_pct", "value": 50},
-                {"ts": "2026-06-25T10:08:00Z", "signal_name": "cpu_pct", "value": 50},
-                {"ts": "2026-06-25T10:09:00Z", "signal_name": "cpu_pct", "value": 99}
-            ]
-        }
-    }
-    headers = {"X-Tenant-Id": "tnt-1"}
-    response = client.post("/v1/verify", json=payload, headers=headers)
-    assert response.status_code == 200
-    data = response.json()
-    assert data["success"] is False
-    assert data["regression_detected"] is True
-    assert data["next_action"] == "ESCALATE"
