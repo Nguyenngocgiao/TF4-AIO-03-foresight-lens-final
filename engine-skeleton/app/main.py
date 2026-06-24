@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from typing import Optional
 
@@ -15,8 +16,12 @@ audit_logger = AuditLogger()
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     return JSONResponse(
         status_code=422,
-        content={"detail": exc.errors(), "body": exc.body},
+        content={"detail": jsonable_encoder(exc.errors()), "body": jsonable_encoder(exc.body)},
     )
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "version": "v1.0"}
 
 @app.post("/v1/predict", response_model=PredictResponse)
 async def predict_capacity(
@@ -39,7 +44,13 @@ async def predict_capacity(
         "confidence": confidence
     }
     
-    audit_id = audit_logger.log_decision(x_tenant_id, request.model_dump(), response_data)
+    # Extract principal_id from authorization header (mocked for now, assumes role ARN or similar is passed)
+    principal_id = authorization.split("Credential=")[-1].split("/")[0] if "Credential=" in authorization else "mock-principal-id"
+    
+    request_data = request.model_dump()
+    request_data["principal_id"] = principal_id
+    
+    audit_id = audit_logger.log_decision(x_tenant_id, request_data, response_data)
     
     return PredictResponse(
         anomaly=anomaly,

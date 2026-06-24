@@ -10,18 +10,18 @@ class AnomalyDetector:
     def generate_recommendation(self, metric: str, tenant_id: str) -> Tuple[dict, str, float]:
         """Returns (Recommendation dict, reasoning, confidence)"""
         confidence = 0.85
-        if metric == "cpu_pct":
+        if metric == "cpu_usage_percent":
             rec = {"action_verb": "SCALE_UP", "target": f"{tenant_id} ECS Service", "from_to": "Current -> +2 Tasks", "evidence_link": f"https://dashboard.internal/metrics/{tenant_id}/cpu"}
             return rec, f"CPU drift detected. Scale ECS Service for {tenant_id}.", confidence
         elif metric == "queue_depth":
             rec = {"action_verb": "SCALE_UP", "target": f"{tenant_id} SQS Workers", "from_to": "Current -> +5 Workers", "evidence_link": f"https://dashboard.internal/metrics/{tenant_id}/queue"}
             return rec, f"Queue backlog detected. Increase worker concurrency for {tenant_id}.", confidence
-        elif metric == "mem_pct":
+        elif metric == "memory_usage_percent":
             rec = {"action_verb": "ROLLBACK", "target": f"{tenant_id} Deployment", "from_to": "v_latest -> v_previous", "evidence_link": f"https://dashboard.internal/metrics/{tenant_id}/mem"}
             return rec, f"Memory leak detected for {tenant_id}. Consider rollback.", confidence
-        elif metric == "latency_p99_ms" or metric == "api_latency_ms":
-            rec = {"action_verb": "INVESTIGATE", "target": f"{tenant_id} API Gateway", "from_to": "N/A", "evidence_link": f"https://dashboard.internal/metrics/{tenant_id}/latency"}
-            return rec, f"Latency spike detected for {tenant_id}.", confidence
+        elif metric in ["active_connections", "db_connection_pool_pct", "cache_hit_rate_pct"]:
+            rec = {"action_verb": "INVESTIGATE", "target": f"{tenant_id} Database/Cache", "from_to": "N/A", "evidence_link": f"https://dashboard.internal/metrics/{tenant_id}/db"}
+            return rec, f"Database or cache saturation detected for {tenant_id}.", confidence
         else:
             rec = {"action_verb": "INVESTIGATE", "target": f"{tenant_id}", "from_to": "N/A", "evidence_link": f"https://dashboard.internal/metrics/{tenant_id}"}
             return rec, f"Anomalous metric {metric} detected for {tenant_id}.", confidence

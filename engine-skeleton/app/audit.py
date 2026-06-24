@@ -18,21 +18,14 @@ class AuditLogger:
         # Hash input for traceability without storing raw PII
         input_hash = hashlib.sha256(json.dumps(request_data, default=str).encode()).hexdigest()[:16]
         
+        # 6 fields as required by Client spec
         log_entry = {
-            # ≥6 fields as required by Client spec
-            "ts": now.isoformat(),
-            "tenant_id": tenant_id,
             "audit_id": str(audit_id),
-            "correlation_id": str(uuid.uuid4()),
+            "timestamp": now.isoformat(),
+            "tenant_id": tenant_id,
+            "principal_id": request_data.get("principal_id", "unknown-principal"),
             "input_hash": f"sha256:{input_hash}",
-            "model_version": "tf4-3sigma-rolling-v1",
-            "ai_call": {
-                "decision": response_data.get("suggested_action"),
-                "confidence": response_data.get("confidence"),
-                "anomaly": response_data.get("anomaly"),
-                "severity": response_data.get("severity")
-            },
-            "encryption": "AES-256-at-rest (S3 SSE-KMS in production)"
+            "recommendation_snapshot": response_data.get("recommendation", {})
         }
         
         log_path = os.path.join(self.log_dir, f"audit_{now.strftime('%Y%m%d')}.jsonl")

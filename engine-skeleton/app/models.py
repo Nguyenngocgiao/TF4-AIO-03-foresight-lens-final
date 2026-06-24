@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import uuid
@@ -20,6 +20,13 @@ class SignalDatapoint(BaseModel):
 class PredictRequest(BaseModel):
     signal_window: List[SignalDatapoint]
     context: PredictContext
+    
+    @field_validator('signal_window')
+    @classmethod
+    def check_window_size(cls, v: List[SignalDatapoint]) -> List[SignalDatapoint]:
+        if len(v) < 60:
+            raise ValueError('signal_window BẮT BUỘC phải chứa ≥ 60 datapoints (60 phút).')
+        return v
 
 class Recommendation(BaseModel):
     action_verb: str     # e.g., "SCALE_UP", "ROLLBACK", "RESTART"
