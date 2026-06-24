@@ -119,6 +119,6 @@ Quá trình **Model Training** (Học baseline cho từng service) sẽ được
 | Failure | Detection | Response |
 |---|---|---|
 | Task crash | ECS health check | Auto-restart |
-| Region outage | CloudWatch alarm | Failover secondary region |
+| Region outage | CloudWatch alarm | Failover secondary region (Design-only, không setup thật) |
 | Throttling | ALB 5xx / 429 | CDO fallback về Rule-based Alert |
 | Memory leak | Memory > 90% | Rolling restart ECS task |

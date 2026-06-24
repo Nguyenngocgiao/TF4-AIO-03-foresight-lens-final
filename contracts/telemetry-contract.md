@@ -33,7 +33,7 @@
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Phát hiện xu hướng tăng đột biến CPU |
 | **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
-| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Volume SLA** | Peak 500 events/sec (đủ đáp ứng Load test k6/Locust) |
 | **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 **Schema example** (concrete JSON payload AI nhận được):
@@ -61,7 +61,7 @@
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Dự đoán Memory Leak dẫn tới OOM (Out Of Memory) |
 | **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
-| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Volume SLA** | Peak 500 events/sec (đủ đáp ứng Load test k6/Locust) |
 | **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ### Signal 3: `active_connections`
@@ -75,7 +75,7 @@
 | **Emit point** | ALB / Nginx metrics |
 | **Used for** | Correlate giữa traffic spike và resource exhaustion |
 | **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
-| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Volume SLA** | Peak 500 events/sec (đủ đáp ứng Load test k6/Locust) |
 | **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ### Signal 4: `db_connection_pool_pct`
@@ -90,7 +90,7 @@
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Phát hiện cạn kiệt Connection Pool của Database do slow queries hoặc Cache Stampede |
 | **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
-| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Volume SLA** | Peak 500 events/sec (đủ đáp ứng Load test k6/Locust) |
 | **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ### Signal 5: `queue_depth`
@@ -105,7 +105,7 @@
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Đo lường mức độ nghẽn cổ chai (backlog) của worker consuming message (ví dụ Ledger worker) |
 | **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
-| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Volume SLA** | Peak 500 events/sec (đủ đáp ứng Load test k6/Locust) |
 | **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ### Signal 6: `cache_hit_rate_pct`
@@ -120,7 +120,7 @@
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Phát hiện Cache Miss Spike dẫn đến quá tải trực tiếp xuống RDS |
 | **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
-| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Volume SLA** | Peak 500 events/sec (đủ đáp ứng Load test k6/Locust) |
 | **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ---

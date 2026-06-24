@@ -123,6 +123,3 @@
 
 
 
-## Open questions
-
-- [ ] Q1: Webhook callback từ AI sang CDO khi async - có cần không?
