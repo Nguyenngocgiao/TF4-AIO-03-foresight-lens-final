@@ -102,7 +102,7 @@ Việc đưa AI vào chuỗi quyết định vận hành IT (AIOps) đòi hỏi 
 | Confidence threshold | Xử lý logic App-level: `confidence < 0.7` → Action verb = `INVESTIGATE`. | App layer |
 | Audit log mandatory | Mã nguồn buộc phải pass qua dòng code ghi Logger S3 trước khi trả `return response`. | App layer |
 | Per-tenant isolation | Context isolation thông qua biến `X-Tenant-Id` bóc tách từ HTTP Headers. | App layer |
-| Rate limit | API Gateway usage plan: Áp mức trần 100 req/phút/tenant để chặn Spam/DDoS. | Edge / API Gateway |
+| Rate limit | FastAPI Middleware: Áp mức trần 100 req/phút/tenant để chặn Spam/DDoS. | Edge / API Gateway |
 | Circuit breaker | CDO-side: Khi AI trả về `HTTP 5xx` liên tục 3 lần → fallback về rules tĩnh. | CDO Layer |
 | Eval baseline check | (Chỉ định) Chạy lệnh Script Evaluator để xuất File báo cáo JSON Brier Score hàng tuần. | CI/CD job |
 
@@ -195,7 +195,7 @@ Foresight Lens tự hào là hệ thống có Cost Model tối ưu bật nhất,
 |---|---|---|---|---|
 | Compute (AWS ECS Fargate Container) | $0.000001 (Tính quy đổi CPU) | 1,440 requests (Mỗi phút 1 lần) | ~$0.01 | ~$0.30 |
 | Storage (Lưu trữ Audit logs JSONL qua S3 Standard) | ~$0.0000001 | 1,440 records (~500KB) | ~$0.01 | ~$0.30 |
-| API Gateway (REST API Request) | $0.0000035 | 1,440 requests | ~$0.005 | ~$0.15 |
+| ALB (Internal Request Routing) | $0.0000035 | 1,440 requests | ~$0.005 | ~$0.15 |
 | **Tổng cộng (Total Estimated)** | | | | **~$0.75 / Tháng** |
 
 > **Kết luận Tài chính**: Với mức giá `< $1 / Tenant / Tháng`, hệ thống thỏa mãn tuyệt đối Constraint ngân sách (Budget < $200), thậm chí đủ khả năng mở rộng lên hàng ngàn Tenant mà không phát sinh gánh nặng tài chính.

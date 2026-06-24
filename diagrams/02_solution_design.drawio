@@ -9,7 +9,7 @@
           <mxGeometry height="42" width="1200" x="60" y="30" as="geometry" />
         </mxCell>
         
-        <mxCell id="subtitle" parent="1" style="text;html=1;resizable=0;points=[];autosize=0;align=left;verticalAlign=top;spacingTop=-4;fontSize=16;fontStyle=0;fontFamily=Helvetica;fontColor=#232F3E;whiteSpace=wrap;" value="EWMA &amp; STL Decomposition, stateless microservice, Audit Logging, CDO manual approval. Target: &lt;500ms latency, Zero-cost baseline." vertex="1">
+        <mxCell id="subtitle" parent="1" style="text;html=1;resizable=0;points=[];autosize=0;align=left;verticalAlign=top;spacingTop=-4;fontSize=16;fontStyle=0;fontFamily=Helvetica;fontColor=#232F3E;whiteSpace=wrap;" value="EWMA &amp; STL Decomposition, stateless ECS Fargate, CloudWatch Audit, CDO manual approval. Target: &lt;500ms latency, Zero-cost baseline." vertex="1">
           <mxGeometry height="34" width="1500" x="62" y="73" as="geometry" />
         </mxCell>
         
@@ -40,7 +40,7 @@
           <mxGeometry height="150" width="180" x="480" y="210" as="geometry" />
         </mxCell>
         
-        <mxCell id="ic-fastapi" parent="grp-api" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#0284C7;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;fontFamily=Helvetica;shadow=1;" value="FastAPI + Pydantic&lt;div&gt;&lt;i&gt;Schema Validation&lt;/i&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="ic-fastapi" parent="grp-api" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#0284C7;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;fontFamily=Helvetica;shadow=1;" value="Internal ALB&lt;div&gt;&lt;i&gt;Traffic Routing&lt;/i&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="64" width="64" x="58" y="40" as="geometry" />
         </mxCell>
         
@@ -49,11 +49,11 @@
           <mxGeometry height="280" width="220" x="750" y="210" as="geometry" />
         </mxCell>
         
-        <mxCell id="ic-stl" parent="grp-engine" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sagemaker;fontFamily=Helvetica;shadow=1;" value="STL Decomposition&lt;div&gt;&lt;i&gt;Noise reduction&lt;/i&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="ic-stl" parent="grp-engine" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;" value="ECS Fargate / STL&lt;div&gt;&lt;i&gt;Noise reduction&lt;/i&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="64" width="64" x="78" y="50" as="geometry" />
         </mxCell>
         
-        <mxCell id="ic-ewma" parent="grp-engine" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sagemaker_model;fontFamily=Helvetica;shadow=1;" value="EWMA Tracker&lt;div&gt;&lt;i&gt;Slow drift detection&lt;/i&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="ic-ewma" parent="grp-engine" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;" value="ECS Fargate / EWMA&lt;div&gt;&lt;i&gt;Slow drift detection&lt;/i&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="64" width="64" x="78" y="170" as="geometry" />
         </mxCell>
         
@@ -62,7 +62,7 @@
           <mxGeometry height="150" width="180" x="1050" y="210" as="geometry" />
         </mxCell>
 
-        <mxCell id="ic-threshold" parent="grp-decision" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#FBC02D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;fontFamily=Helvetica;shadow=1;" value="Static Thresholding&lt;div&gt;&lt;i&gt;Confidence Scoring&lt;/i&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="ic-threshold" parent="grp-decision" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#FBC02D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;" value="FastAPI Thresholding&lt;div&gt;&lt;i&gt;Confidence Scoring&lt;/i&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="64" width="64" x="58" y="40" as="geometry" />
         </mxCell>
 
@@ -71,14 +71,14 @@
           <mxGeometry height="150" width="180" x="1050" y="440" as="geometry" />
         </mxCell>
         
-        <mxCell id="ic-dynamo" parent="grp-audit" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.dynamodb;fontFamily=Helvetica;shadow=1;" value="DynamoDB / S3&lt;div&gt;&lt;i&gt;Input Hash + Decisions&lt;/i&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="ic-dynamo" parent="grp-audit" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fontFamily=Helvetica;shadow=1;" value="CloudWatch / S3&lt;div&gt;&lt;i&gt;Input Hash + Decisions&lt;/i&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="64" width="64" x="58" y="40" as="geometry" />
         </mxCell>
         
         <!-- Edges -->
         <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-prom" target="ic-fastapi">
           <mxGeometry relative="1" as="geometry" />
-          <mxCell value="&lt;b&gt;POST /v1/predict&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;labelBackgroundColor=none;" vertex="1" connectable="0" parent="edge1">
+          <mxCell value="&lt;b&gt;POST /v1/predict (ALB)&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;labelBackgroundColor=none;" vertex="1" connectable="0" parent="edge1">
             <mxGeometry x="-0.1" y="-10" relative="1" as="geometry">
               <mxPoint as="offset" />
             </mxGeometry>
@@ -87,7 +87,7 @@
         
         <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-fastapi" target="ic-stl">
           <mxGeometry relative="1" as="geometry" />
-          <mxCell value="&lt;b&gt;Validated signal_window&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;labelBackgroundColor=none;" vertex="1" connectable="0" parent="edge2">
+          <mxCell value="&lt;b&gt;Fargate Route&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;labelBackgroundColor=none;" vertex="1" connectable="0" parent="edge2">
             <mxGeometry x="-0.1" y="-10" relative="1" as="geometry">
               <mxPoint as="offset" />
             </mxGeometry>

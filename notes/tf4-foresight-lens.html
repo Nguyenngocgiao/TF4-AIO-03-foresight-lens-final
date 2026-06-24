@@ -688,7 +688,7 @@ h3 {
         </div>
         <div class="card card-accent-left">
           <h3>Deployment</h3>
-          <p>Serving: Lambda + API GW <span style="font-size:0.8em;color:var(--text-muted);">(Why Lambda? → Maximize Free Tier)</span>. Training: design-only. ap-southeast-1.</p>
+          <p>Serving: ECS Fargate + Internal ALB <span style="font-size:0.8em;color:var(--text-muted);">(Why ECS? → No cold-start risk)</span>. Training: design-only. ap-southeast-1.</p>
         </div>
       </div>
     </div>
@@ -722,8 +722,8 @@ h3 {
         <div class="card">
           <h3>Stack</h3>
           <p style="line-height:1.8">
-            Lambda 512MB + API Gateway <span style="font-size:0.8em;color:var(--text-muted);">(Why not ECS? → Maximize Free Tier, scale to 0)</span><br>
-            DynamoDB audit <span style="font-size:0.8em;color:var(--text-muted);">(Why not RDS? → Low-latency NoSQL for logs)</span><br>
+            ECS Fargate 512MB + Internal ALB <span style="font-size:0.8em;color:var(--text-muted);">(Why ECS? → VPC Internal, no cold-start, stable latency)</span><br>
+            CloudWatch Logs &amp; S3 Audit <span style="font-size:0.8em;color:var(--text-muted);">(Why CloudWatch? → Native integration, cost-effective)</span><br>
             No LLM<br>
             FP ≤ 12% · Catch ≥ 80%<br>
             <strong style="color:var(--green)">Budget $200 → Actual ~$0/month</strong>
@@ -755,7 +755,7 @@ h3 {
           &lt;mxGeometry height=&quot;42&quot; width=&quot;1200&quot; x=&quot;60&quot; y=&quot;30&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
-        &lt;mxCell id=&quot;subtitle&quot; parent=&quot;1&quot; style=&quot;text;html=1;resizable=0;points=[];autosize=0;align=left;verticalAlign=top;spacingTop=-4;fontSize=16;fontStyle=0;fontFamily=Helvetica;fontColor=#232F3E;whiteSpace=wrap;&quot; value=&quot;EWMA &amp;amp; STL Decomposition, stateless microservice, Audit Logging, CDO manual approval. Target: &amp;lt;500ms latency, Zero-cost baseline.&quot; vertex=&quot;1&quot;&gt;
+        &lt;mxCell id=&quot;subtitle&quot; parent=&quot;1&quot; style=&quot;text;html=1;resizable=0;points=[];autosize=0;align=left;verticalAlign=top;spacingTop=-4;fontSize=16;fontStyle=0;fontFamily=Helvetica;fontColor=#232F3E;whiteSpace=wrap;&quot; value=&quot;EWMA &amp;amp; STL Decomposition, stateless ECS Fargate, CloudWatch Audit, CDO manual approval. Target: &amp;lt;500ms latency, Zero-cost baseline.&quot; vertex=&quot;1&quot;&gt;
           &lt;mxGeometry height=&quot;34&quot; width=&quot;1500&quot; x=&quot;62&quot; y=&quot;73&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
@@ -786,7 +786,7 @@ h3 {
           &lt;mxGeometry height=&quot;150&quot; width=&quot;180&quot; x=&quot;480&quot; y=&quot;210&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
-        &lt;mxCell id=&quot;ic-fastapi&quot; parent=&quot;grp-api&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#0284C7;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;fontFamily=Helvetica;shadow=1;&quot; value=&quot;FastAPI + Pydantic&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Schema Validation&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
+        &lt;mxCell id=&quot;ic-fastapi&quot; parent=&quot;grp-api&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#0284C7;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;fontFamily=Helvetica;shadow=1;&quot; value=&quot;Internal ALB&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Traffic Routing&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
           &lt;mxGeometry height=&quot;64&quot; width=&quot;64&quot; x=&quot;58&quot; y=&quot;40&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
@@ -795,11 +795,11 @@ h3 {
           &lt;mxGeometry height=&quot;280&quot; width=&quot;220&quot; x=&quot;750&quot; y=&quot;210&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
-        &lt;mxCell id=&quot;ic-stl&quot; parent=&quot;grp-engine&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sagemaker;fontFamily=Helvetica;shadow=1;&quot; value=&quot;STL Decomposition&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Noise reduction&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
+        &lt;mxCell id=&quot;ic-stl&quot; parent=&quot;grp-engine&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;&quot; value=&quot;ECS Fargate / STL&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Noise reduction&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
           &lt;mxGeometry height=&quot;64&quot; width=&quot;64&quot; x=&quot;78&quot; y=&quot;50&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
-        &lt;mxCell id=&quot;ic-ewma&quot; parent=&quot;grp-engine&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sagemaker_model;fontFamily=Helvetica;shadow=1;&quot; value=&quot;EWMA Tracker&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Slow drift detection&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
+        &lt;mxCell id=&quot;ic-ewma&quot; parent=&quot;grp-engine&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;&quot; value=&quot;ECS Fargate / EWMA&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Slow drift detection&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
           &lt;mxGeometry height=&quot;64&quot; width=&quot;64&quot; x=&quot;78&quot; y=&quot;170&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
@@ -808,7 +808,7 @@ h3 {
           &lt;mxGeometry height=&quot;150&quot; width=&quot;180&quot; x=&quot;1050&quot; y=&quot;210&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
 
-        &lt;mxCell id=&quot;ic-threshold&quot; parent=&quot;grp-decision&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#FBC02D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;fontFamily=Helvetica;shadow=1;&quot; value=&quot;Static Thresholding&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Confidence Scoring&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
+        &lt;mxCell id=&quot;ic-threshold&quot; parent=&quot;grp-decision&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#FBC02D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;&quot; value=&quot;FastAPI Thresholding&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Confidence Scoring&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
           &lt;mxGeometry height=&quot;64&quot; width=&quot;64&quot; x=&quot;58&quot; y=&quot;40&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
 
@@ -817,14 +817,14 @@ h3 {
           &lt;mxGeometry height=&quot;150&quot; width=&quot;180&quot; x=&quot;1050&quot; y=&quot;440&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
-        &lt;mxCell id=&quot;ic-dynamo&quot; parent=&quot;grp-audit&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.dynamodb;fontFamily=Helvetica;shadow=1;&quot; value=&quot;DynamoDB / S3&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Input Hash + Decisions&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
+        &lt;mxCell id=&quot;ic-dynamo&quot; parent=&quot;grp-audit&quot; style=&quot;sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fontFamily=Helvetica;shadow=1;&quot; value=&quot;CloudWatch / S3&amp;lt;div&amp;gt;&amp;lt;i&amp;gt;Input Hash + Decisions&amp;lt;/i&amp;gt;&amp;lt;/div&amp;gt;&quot; vertex=&quot;1&quot;&gt;
           &lt;mxGeometry height=&quot;64&quot; width=&quot;64&quot; x=&quot;58&quot; y=&quot;40&quot; as=&quot;geometry&quot; /&gt;
         &lt;/mxCell&gt;
         
         &lt;!-- Edges --&gt;
         &lt;mxCell id=&quot;edge1&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;strokeColor=#232F3E;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;ic-prom&quot; target=&quot;ic-fastapi&quot;&gt;
           &lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot; /&gt;
-          &lt;mxCell value=&quot;&amp;lt;b&amp;gt;POST /v1/predict&amp;lt;/b&amp;gt;&quot; style=&quot;edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;labelBackgroundColor=none;&quot; vertex=&quot;1&quot; connectable=&quot;0&quot; parent=&quot;edge1&quot;&gt;
+          &lt;mxCell value=&quot;&amp;lt;b&amp;gt;POST /v1/predict (ALB)&amp;lt;/b&amp;gt;&quot; style=&quot;edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;labelBackgroundColor=none;&quot; vertex=&quot;1&quot; connectable=&quot;0&quot; parent=&quot;edge1&quot;&gt;
             &lt;mxGeometry x=&quot;-0.1&quot; y=&quot;-10&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;
               &lt;mxPoint as=&quot;offset&quot; /&gt;
             &lt;/mxGeometry&gt;
@@ -833,7 +833,7 @@ h3 {
         
         &lt;mxCell id=&quot;edge2&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;strokeColor=#232F3E;&quot; edge=&quot;1&quot; parent=&quot;1&quot; source=&quot;ic-fastapi&quot; target=&quot;ic-stl&quot;&gt;
           &lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot; /&gt;
-          &lt;mxCell value=&quot;&amp;lt;b&amp;gt;Validated signal_window&amp;lt;/b&amp;gt;&quot; style=&quot;edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;labelBackgroundColor=none;&quot; vertex=&quot;1&quot; connectable=&quot;0&quot; parent=&quot;edge2&quot;&gt;
+          &lt;mxCell value=&quot;&amp;lt;b&amp;gt;Fargate Route&amp;lt;/b&amp;gt;&quot; style=&quot;edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;labelBackgroundColor=none;&quot; vertex=&quot;1&quot; connectable=&quot;0&quot; parent=&quot;edge2&quot;&gt;
             &lt;mxGeometry x=&quot;-0.1&quot; y=&quot;-10&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;
               &lt;mxPoint as=&quot;offset&quot; /&gt;
             &lt;/mxGeometry&gt;
