@@ -13,6 +13,7 @@
 
 - **Current version**: `v1.0`
 - **Evolution**: backward-compatible additions only. Breaking change → new contract version + migration window
+- **Change request process**: raise trong nhóm task force → họp bàn → bump version + notify all
 
 ---
 
@@ -31,6 +32,22 @@
 | **Emit point** | CloudWatch Metrics / Prometheus → CDO Ingestion → AI API |
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Phát hiện xu hướng tăng đột biến CPU |
+| **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
+| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Cost estimate** | Tối ưu thông qua Time-series DB |
+
+**Schema example** (concrete JSON payload AI nhận được):
+
+```json
+{
+  "ts": "2026-06-25T10:30:00Z",
+  "tenant_id": "tnt-abc123",
+  "service_id": "payment-gateway",
+  "signal_name": "cpu_usage_percent",
+  "value": 85.5,
+  "labels": {"region": "ap-southeast-1"}
+}
+```
 
 ### Signal 2: `memory_usage_percent`
 
@@ -43,6 +60,9 @@
 | **Emit point** | CloudWatch Metrics / Prometheus → CDO Ingestion → AI API |
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Dự đoán Memory Leak dẫn tới OOM (Out Of Memory) |
+| **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
+| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ### Signal 3: `active_connections`
 
@@ -54,6 +74,9 @@
 | **Frequency** | 1 phút |
 | **Emit point** | ALB / Nginx metrics |
 | **Used for** | Correlate giữa traffic spike và resource exhaustion |
+| **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
+| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ### Signal 4: `db_connection_pool_pct`
 
@@ -66,6 +89,9 @@
 | **Emit point** | RDS CloudWatch Metrics → CDO Ingestion → AI API |
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Phát hiện cạn kiệt Connection Pool của Database do slow queries hoặc Cache Stampede |
+| **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
+| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ### Signal 5: `queue_depth`
 
@@ -78,6 +104,9 @@
 | **Emit point** | SQS CloudWatch Metrics → CDO Ingestion → AI API |
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Đo lường mức độ nghẽn cổ chai (backlog) của worker consuming message (ví dụ Ledger worker) |
+| **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
+| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ### Signal 6: `cache_hit_rate_pct`
 
@@ -90,6 +119,9 @@
 | **Emit point** | ElastiCache CloudWatch Metrics → CDO Ingestion → AI API |
 | **Retention** | 7 ngày hot + 83 ngày cold (tổng 90 ngày minimum) |
 | **Used for** | Phát hiện Cache Miss Spike dẫn đến quá tải trực tiếp xuống RDS |
+| **Emit SLA** | p99 latency < 60s từ lúc phát sinh metric |
+| **Volume SLA** | Peak 50k events/sec (tổng toàn hệ thống) |
+| **Cost estimate** | Tối ưu thông qua Time-series DB |
 
 ---
 

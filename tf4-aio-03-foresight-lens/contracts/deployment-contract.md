@@ -73,6 +73,47 @@ Quá trình **Model Training** (Học baseline cho từng service) sẽ được
 | CDO-Fraud | (same - shared) | IAM SigV4 |
 | CDO-Ledger | (same - shared) | IAM SigV4 |
 
+## Rollout strategy: Canary
+
+| Step | Traffic | Interval |
+|---|---|---|
+| 1 | 10% | 5 phút |
+| 2 | 50% | 5 phút |
+| 3 | 100% | - |
+
+**Abort criteria** (bất kỳ điều kiện trigger → auto rollback ngay):
+- Error rate > 1%
+- P99 latency > 800 ms
+- Cảnh báo "Capacity Exhaustion" sai lệch > 15% (Custom cho TF4)
+
+## Rollback
+
+| Aspect | Value |
+|---|---|
+| **Primary method** | ArgoCD rollback to previous git SHA |
+| **Secondary method** | ECS service revert (manual) |
+| **Target RTO** | < 60 giây |
+| **Auto-trigger** | Yes (khi abort criteria met trong canary rollout) |
+
+## Health check
+
+| Field | Value |
+|---|---|
+| **Path** | `/health` |
+| **Port** | 8080 |
+| **Interval** | 30 giây |
+| **Healthy threshold** | 2 consecutive 200 |
+| **Unhealthy threshold** | 3 consecutive non-200 |
+
+## Observability
+
+| Aspect | Configuration |
+|---|---|
+| **OTel endpoint** | collector URL per CDO platform (config qua env var) |
+| **Log destination** | CloudWatch Logs (retention 14 ngày) |
+| **Metrics** | Prometheus / CloudWatch |
+| **Traces** | OpenTelemetry → AWS X-Ray |
+
 ## Failure modes & response
 
 | Failure | Detection | Response |
