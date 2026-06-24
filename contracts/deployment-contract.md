@@ -69,7 +69,8 @@
 ## Model Training Topology (Design-only)
 
 Do tính chất bài toán TF4, kiến trúc triển khai bắt buộc chia làm hai ranh giới. CDO **chỉ chịu trách nhiệm host phần Model Serving** (FastAPI phía trên). 
-Quá trình **Model Training** (Học baseline cho từng service) sẽ được thiết kế trên giấy: chạy batch job qua AWS SageMaker hoặc AWS Batch 1 lần/tuần do nhóm AI tự trigger. Nhóm CDO không cần setup hạ tầng training này.
+Quá trình **Model Training** (Học baseline cho từng service) sẽ được thiết kế trên giấy: chạy batch job qua AWS SageMaker hoặc AWS Batch 1 lần/tuần.
+*Ghi chú:* **ADR (Architecture Decision Record)** sẽ định nghĩa chi tiết Logic Trigger tự động (Retrain trigger logic) khi model bị drift theo đúng yêu cầu của Mentor. Nhóm CDO không cần setup hạ tầng training này.
 
 ## Per-CDO platform pointer
 
