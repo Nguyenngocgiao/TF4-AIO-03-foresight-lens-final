@@ -131,4 +131,5 @@ Mọi signal phải comply:
 - **Tenant scoping**: mọi signal payload **bắt buộc** có `tenant_id` field - AI engine không accept signal thiếu tenant_id.
 - **Time precision**: timestamp RFC3339 UTC, millisecond precision.
 - **Schema validation**: AI ingestion layer (Pydantic) validate schema; reject malformed.
+- **Data Alignment & Imputation**: Time buckets gửi vào API phải liền mạch. Nếu hạ tầng bị đứt gãy (Network jitter/Drop metric), CDO **bắt buộc** phải tiền xử lý (Forward-fill hoặc Zero-fill). AI Engine sẽ văng lỗi `400` nếu phát hiện time-series bị thủng.
 - **PII**: KHÔNG được chứa PII (email / phone / name) trong signal value hoặc labels.
