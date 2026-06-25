@@ -7,16 +7,20 @@ This repository contains the AI Engine and Documentation for the Capstone Projec
 
 **Foresight Lens** is a predictive alerting engine designed to detect and warn about impending Capacity Exhaustion (OOM/CPU starvation) events with a minimum lead time of 15 minutes before actual SLO breach.
 
-To optimize the strict $200 budget constraint and ensure extreme low latency, our team adopted a **Statistical 3-Sigma Rolling Window** algorithm in favor of traditional LLM solutions. This decision guarantees mathematically accurate detection, zero hallucination risk, and virtually $0 execution cost.
+To optimize the strict $200 budget constraint and ensure extreme low latency, our team adopted a **STL seasonal baseline + EWMA control chart** algorithm in favor of LLM solutions. STL decomposition (trained offline per service) removes the daily load curve; an EWMA control chart at inference catches sustained capacity drift early while smoothing one-off spikes. This guarantees explainable detection, zero hallucination risk, and ~$0 inference cost.
 
 ### 🗂 Repository Structure
 
 - `engine-skeleton/`: Contains the FastAPI implementation of the AI Engine.
-  - `app/engine.py`: The core 3-Sigma detection logic.
+  - `app/engine.py`: STL-baseline + EWMA control-chart detection logic.
+  - `app/baseline.py`: Per-service baseline loader (local file default, S3 in prod).
   - `app/audit.py`: The secure PII-hashed audit logger.
-  - `app/main.py`: The `/v1/detect` and `/v1/verify` API endpoints.
-  - `tests/test_api.py`: 10 comprehensive pytest scenarios (Multi-tenant, Happy path, False positive checks).
-- `xbrain-learner/tf4-evidence/`: Contains the evaluation scripts (`tf4_evidence.py`) generating Brier Score, Precision, and Recall metrics.
+  - `app/main.py`: The `POST /v1/predict` + `/health` API endpoints.
+  - `baselines/`: Pre-trained per-service seasonal profiles (evidence).
+  - `tests/test_api.py`: 8 pytest scenarios (multi-service, happy path, drift, FP, isolation).
+- `scripts/train_baseline.py`: Offline STL trainer producing the per-service baselines.
+- `tf4-evidence/`: Honest evaluation harness (`eval_engine.py`, `tf4_evidence.py`) generating
+  measured Brier Score, Precision, Recall, FP-rate and lead-time (no hardcoded numbers).
 - `docs/`: The complete Capstone specification and design documents.
 - `contracts/`: API and deployment contracts between the AI and CDO groups.
 - `tf4-foresight-lens.html`: The interactive final presentation slide deck.
@@ -32,7 +36,7 @@ pip install -r requirements.txt
 ```
 
 #### 2. Run Tests
-Ensure all 10 scenarios pass with strict X-Tenant-Id isolation:
+Ensure all 8 scenarios pass (happy path, drift, slow leak, FP, multi-service, X-Tenant-Id isolation):
 ```bash
 pytest tests/ -v
 ```
@@ -43,13 +47,14 @@ uvicorn app.main:app --reload --port 8000
 ```
 
 ### 📊 Performance & Evidence
-Our architecture was validated against 6 months of historical synthetic data:
-- **Lead time**: ~ 106 minutes prior to crash.
-- **Precision**: 1.0 (100%)
-- **False Positive Rate (FPR)**: 1.9%
-- **Cost**: < $3 / month (Local compute execution).
+Measured on a held-out labelled day across 3 tier-1 services (see `docs/04_eval_report.md`):
+- **Lead time (median)**: ~110 minutes before SLO breach.
+- **Recall (catch rate)**: 0.971  ·  **Precision**: 0.793  ·  **F1**: 0.873
+- **False Positive Rate**: 7.1% (client gate ≤ 12%).
+- **Brier Score**: 0.049 (well calibrated).
+- **Cost**: ~$36 / month (Fargate 2-task HA), $0 inference token cost.
 
-See `docs/04_eval_report.md` for full evaluation details.
+All numbers are reproduced by `python tf4-evidence/tf4_evidence.py`. See `docs/04_eval_report.md`.
 
 ### 👥 Team
 - **Group**: AIO-03
