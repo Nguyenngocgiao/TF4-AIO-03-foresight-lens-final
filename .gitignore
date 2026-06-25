@@ -6,3 +6,12 @@ __pycache__/
 evidence/*.png
 *.jsonl
 .DS_Store
+
+# Secrets - never commit keys
+*.pem
+*.key
+
+# Build / runtime artifacts
+*.tar.gz
+*.log
+logs/
