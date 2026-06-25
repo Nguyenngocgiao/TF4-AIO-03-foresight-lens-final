@@ -106,7 +106,7 @@ Việc đưa AI vào chuỗi quyết định vận hành IT (AIOps) đòi hỏi 
 | Confidence threshold | Xử lý logic App-level: `confidence < 0.7` → Action verb = `INVESTIGATE`. | App layer |
 | Audit log mandatory | Mã nguồn buộc phải pass qua dòng code ghi Logger S3 trước khi trả `return response`. | App layer |
 | Per-tenant isolation | Context isolation thông qua biến `X-Tenant-Id` bóc tách từ HTTP Headers. | App layer |
-| Rate limit | FastAPI Middleware: Áp mức trần 100 req/phút/tenant để chặn Spam/DDoS. | Edge / API Gateway |
+| Rate limit | FastAPI Middleware: Áp mức trần 600 req/phút/tenant để chặn Spam/DDoS. | Edge / API Gateway |
 | Circuit breaker | CDO-side: Khi AI trả về `HTTP 5xx` liên tục 3 lần → fallback về rules tĩnh. | CDO Layer |
 | Eval baseline check | (Chỉ định) Chạy lệnh Script Evaluator để xuất File báo cáo JSON Brier Score hàng tuần. | CI/CD job |
 
@@ -162,13 +162,18 @@ Toàn bộ payload nhạy cảm không bao giờ được lưu thô (No Raw Writ
 
 ```json
 {
+  "audit_id": "audit-xyz789",
   "ts": "2026-06-25T10:30:00Z",
   "correlation_id": "req-1234",
   "tenant_id": "tnt-payment-core",
+  "principal_id": "arn:aws:iam::123456789012:role/cdo-api-caller",
   "model_version": "tf4-ewma-stl-v1",
   "input_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "data_encryption": "AWS KMS CMK (aws/s3)",
-  "decision": "SCALE_UP",
+  "recommendation_snapshot": {
+    "action_verb": "SCALE_UP",
+    "from_to": "Current -> +2 Tasks"
+  },
   "confidence": 0.95,
   "execution_ms": 4.12
 }
