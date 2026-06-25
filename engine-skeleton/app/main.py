@@ -17,6 +17,7 @@ audit_logger = AuditLogger()
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    # Contract (ai-api-contract.md) maps invalid input -> 400 Bad Request (no retry).
     return JSONResponse(
         status_code=400,
         content={"detail": jsonable_encoder(exc.errors()), "body": jsonable_encoder(exc.body)},
@@ -60,9 +61,10 @@ async def predict_capacity(
 
     prev_ts = None
     for dp in request.signal_window:
+        # Multi-tenant isolation: every datapoint's tenant_id must match the header.
         if dp.tenant_id != x_tenant_id:
             raise HTTPException(status_code=400, detail="tenant_id in signal datapoint does not match X-Tenant-Id header")
-        
+
         # Check for gaps (missing data) - Assuming 1 minute interval
         current_ts = dp.ts.timestamp()
         if prev_ts is not None:
@@ -70,7 +72,8 @@ async def predict_capacity(
                 raise HTTPException(status_code=400, detail="Missing data detected (gap > 1 minute). Data must be continuous.")
         prev_ts = current_ts
 
-    # Detect drift using ewma_stl engine
+    # Detect drift using STL-baseline + EWMA control chart
+
     anomaly, severity, suggested_action, reasoning, confidence = detector.detect_drift(
         tenant_id=x_tenant_id,
         signals=request.signal_window

@@ -1,106 +1,94 @@
 # Eval Report - Foresight Lens
 
 <!-- Doc owner: AIO-03
-     Status: Skeleton (W11 T6 Pack #1) → Full results (W12 T4 Pack #2)
-     Word target: 1000-1800 từ -->
+     Status: Measured (W11 build) → refined W12 with curveball results
+     Word target: 1000-1800 từ
+     All numbers below are produced by tf4-evidence/eval_engine.py against held-out
+     labelled telemetry. NO hardcoded metrics. Re-run: python tf4-evidence/tf4_evidence.py -->
 
 ## 1. Test scenarios
 
 | # | Scenario | Type | Expected output |
 |---|---|---|---|
-| 1 | Happy Path (Normal CPU) | Happy | ALERT_ONLY |
-| 2 | Sudden Spike (CPU 50→98) | Happy | SCALE_UP |
-| 3 | Gradual Drift (CPU tăng dần→95) | Happy | anomaly=True |
-| 4 | Slow Leak (Memory 40→92 OOM) | Happy | INVESTIGATE |
-| 5 | Noisy Baseline (Flash Sale traffic) | Edge | ALERT_ONLY (No FP) |
-| 6 | Sudden Drop (Throughput 1000→50) | Edge | INVESTIGATE (two-tailed) |
-| 7 | Multi-tenant Isolation | Edge | Tenant B unaffected |
+| 1 | Happy Path (on-baseline) | Happy | anomaly=False |
+| 2 | Sudden Spike (latency +600ms) | Drift | anomaly=True / SCALE_UP |
+| 3 | Gradual Drift (CPU 40→94 over 90min) | Drift | anomaly=True, lead ≥15min |
+| 4 | Slow Leak (Memory 50→96 over 180min) | Drift | anomaly=True / ROLLBACK |
+| 5 | Noisy Baseline (queue variance, no mean shift) | FP trap | anomaly=False (no FP) |
+| 6 | Sudden Drop (throughput collapse) | Edge | INVESTIGATE (two-tailed) |
+| 7 | Multi-tenant / multi-service isolation | Edge | per-service baseline, no bleed |
 | 8 | Missing X-Tenant-Id | Adversarial | HTTP 422 |
-| 9 | Verify Success (metrics normal) | Verify | success=True |
-| 10 | Verify Regression (metrics still bad) | Verify | regression_detected=True, ESCALATE |
 
 ## 2. Methodology
 
-- **Setup**: Chạy local qua script `tf4_evidence.py`.
-- **Test data**: Dữ liệu synthetic giả lập 7 ngày của 5 services độc lập (PaymentGW, Fraud, Ledger, KYC, Reporting) để chứng minh tính đa nhiệm.
-- **Run procedure**:
-  1. Load dữ liệu giả lập có nhồi nhiễu (noise) và chu kỳ (seasonality).
-  2. Bơm 4 Root Causes (CPU, Memory, Queue, Connection) vào data.
-  3. Chạy A/B/C testing đối chứng 3 thuật toán (EWMA & STL Decomposition, EWMA, Isolation Forest).
-  4. Record metric.
-- **Metrics measured**: precision · recall · F1 · P50/P99 latency · cost/call
+- **Engine under test**: the real serving engine (`engine-skeleton/app/engine.py`) =
+  STL seasonal baseline (trained offline) + **EWMA control chart** at inference.
+- **Baseline training**: `scripts/train_baseline.py` runs STL (period=1440, robust) on
+  6 clean days per service and stores a per-minute seasonal profile + residual σ.
+- **Eval data**: a held-out 7th day per service (`tf4-evidence/evidence/holdout_*.csv`)
+  with 4 injected scenarios + 1 false-positive trap, labelled in `holdout_*_labels.json`.
+- **Procedure**: slide a 120-min window (step 5 min) across the holdout for the 3 tier-1
+  services (payment-gw, fraud-detector, ledger); score every window vs ground truth.
+- **A/B baseline**: Isolation Forest on the same windows for an honest comparison.
 
-![Service Comparison](../xbrain-learner/tf4-evidence/evidence/service_comparison_cpu.png)
-*(Biểu đồ trên: Bằng chứng cho thấy 3 dịch vụ có baseline và đỉnh tải (Peak hours) hoàn toàn khác nhau, chứng minh AI không bị học vẹt)*
+## 3. Results (measured)
 
-## 3. Results (Statistical EWMA & STL Decomposition Model)
+Source: `tf4-evidence/evidence/evidence_algorithm_evaluation.json`.
 
-Dựa trên kết quả chạy mô phỏng tự động từ script `tf4-evidence/tf4_evidence.py`. Toàn bộ số liệu gốc được lưu tự động và có thể đối chứng tại thư mục `tf4-evidence/evidence/`.
-
-| Metric | Target | Actual | Pass/Fail | Nguồn trích xuất (Evidence Source) |
-|---|---|---|---|---|
-| Precision (σ=3.0) | ≥ 0.8 | **1.000** | ✓ Pass | `evidence_confidence_threshold.json` (real ewma_stl eval, 200 windows) |
-| Recall (σ=3.0) | ≥ 0.7 | **1.000** | ✓ Pass | `evidence_confidence_threshold.json` (real ewma_stl eval, 200 windows) |
-| F1 Score (σ=3.0) | ≥ 0.75 | **1.000** | ✓ Pass | `evidence_confidence_threshold.json` |
-| False Positive Rate | ≤ 0.12 | **0.000 (0%)** | ✓ Pass | `evidence_confidence_threshold.json` (σ=3.0) |
-| Brier Score | < 0.25 | **0.032** | ✓ Pass | `evidence_confidence_threshold.json` + `evidence_reliability_diagram.json` |
-| Lead Time | ≥ 15 mins | **106 mins** | ✓ Pass | `evidence_lead_time.json` |
-| P99 latency | < 500ms | **< 10ms** | ✓ Pass | In-memory NumPy computation |
-| Cost per month | < $200 | **$0 - $3** | ✓ Pass | `evidence_cost.json` |
-| Pytest Scenarios | ≥ 10 | **10/10 passed** | ✓ Pass | `engine-skeleton/tests/test_api.py` |
-
-![Metric Priority](../xbrain-learner/tf4-evidence/evidence/metric_priority_multi_root.png)
-*(Biểu đồ trên: Phân tích Metric Priority. Chứng minh rạch ròi rằng bất kể là lỗi gì (Root cause nào), thì `latency` và `queue_depth` luôn là 2 chỉ số báo hiệu sớm nhất, trước cả khi CPU/Memory chết).*
-
-### 3.1 Algorithm Evaluation (Đang tiến hành)
-
-Thiết kế ban đầu của team là sử dụng `EWMA + Isolation Forest`. Tuy nhiên, kết quả test thực tế (A/B/C testing trên 100 windows) đã dẫn đến đề xuất "quay xe":
-
-| Thuật toán | F1 Score | FP Rate (Báo động giả) | Compute Latency |
+| Metric | Target | Actual | Pass/Fail |
 |---|---|---|---|
-| **EWMA & STL Decomposition** | ~ 1.0 | **0%** | **< 1 ms** |
-| **Isolation Forest** | ~ 1.0 | > 0% (nhạy cảm nhiễu) | ~ 20 ms (nặng nhất) |
-| **EWMA** | Thấp hơn | > 0% | < 1 ms |
+| Precision | ≥ 0.80 | **0.793** | ⚠️ ~target (see note) |
+| Recall (catch rate) | ≥ 0.80 | **0.971** | ✓ Pass |
+| F1 Score | ≥ 0.75 | **0.873** | ✓ Pass |
+| False Positive Rate | ≤ 0.12 | **0.071 (7.1%)** | ✓ Pass |
+| Brier Score | < 0.10 | **0.049** | ✓ Pass |
+| Lead Time (median) | ≥ 15 min | **110 min** | ✓ Pass |
+| P99 latency | < 500 ms | **< 10 ms** (in-memory NumPy) | ✓ Pass |
+| Cost / month | < $200 | **~$36 (Fargate 2-task)** | ✓ Pass |
+| Pytest scenarios | — | **8/8 passed** | ✓ Pass |
 
-**Đề xuất**: Kết quả sơ bộ cho thấy EWMA & STL Decomposition có ưu thế về độ trễ và tỷ lệ báo động giả (FP=0%), phù hợp làm baseline. Tuy nhiên Isolation Forest có thể mạnh hơn ở các pattern phức tạp. Chưa đưa ra quyết định cuối cùng, chờ thảo luận cùng CDO.
+> **Note on precision (0.793):** windows on the *boundary* of an anomaly region (EWMA still
+> elevated just after a fault clears) count as FP in this strict per-window scoring. It does
+> not breach the client's hard gate (FP ≤ 12%); recall and lead time are the primary KPIs and
+> both pass with wide margin. Tuning toward higher precision (K=4.5) is logged in ADR-006.
 
-![Algorithm Evaluation](../xbrain-learner/tf4-evidence/evidence/algorithm_comparison.png)
+### 3.1 Algorithm comparison (A/B, measured on the same holdout)
 
-### 3.2 Confusion matrix
+Source: `tf4-evidence/evidence/evidence_algorithm_comparison.json`.
 
-```
-                Predicted
-              | Anomaly | Normal
-Actual ─────┼─────────┼────────
-   Anomaly   |   TP    |   FN
-   Normal    |   FP    |   TN
-```
+| Algorithm | Recall | FP Rate | Meets FP ≤ 12% ? |
+|---|---|---|---|
+| **STL + EWMA control chart** | **0.971** | **0.071** | ✓ Yes |
+| Isolation Forest (contamination=0.02) | 0.638 | 0.214 | ✗ No |
+
+EWMA+STL dominates: higher catch rate AND lower false alarms, because de-seasonalising
+first removes the daily load curve that makes Isolation Forest fire on normal peaks.
+
+![Algorithm comparison](../tf4-evidence/evidence/algorithm_comparison.png)
+
+### 3.2 Confusion matrix (aggregate, 3 services)
 
 | | Predicted Anomaly | Predicted Normal |
 |---|---|---|
-| Actual Anomaly | <TP> | <FN> |
-| Actual Normal | <FP> | <TN> |
+| **Actual Anomaly** | TP = 169 | FN = 5 |
+| **Actual Normal** | FP = 44 | TN = 574 |
 
 ## 4. Failure analysis
 
-### 4.1 Failure case 1: Dữ liệu quá "đẹp" (Zero variance)
+### 4.1 Zero-variance / flat input
+- **Risk**: residual σ = 0 → division blow-up in the control limit.
+- **Fix**: `engine.py` floors σ to 1.0 when σ ≤ 0; fallback path also guards std=0.
+- **Result**: handled; covered by happy-path test.
 
-- **Expected**: Thuật toán không bị crash khi dữ liệu không có độ lệch chuẩn (std = 0).
-- **Got**: Báo lỗi `False` do `std_val = 0` (chia cho 0 hoặc không thỏa mãn điều kiện `> 0`).
-- **Root cause**: Dữ liệu synthetic đôi khi hoàn toàn bằng phẳng (Ví dụ CPU lúc nào cũng đứng im ở 50%).
-- **Fix**: Thêm một hằng số epsilon (`std_val = 1.0` nếu `std_val == 0`) trong `engine.py`.
-- **Result after fix**: Đã pass toàn bộ Unit Test.
-
-### 4.2 Failure case 2: Báo động giả dịp Flash Sale
-- **Expected**: Không báo động giả.
-- **Got**: False Positive tăng nhẹ lên 0.4% khi nhồi nhiễu có phương sai cực cao (std=20).
-- **Root cause**: ewma_stl nhạy cảm với các spike (gai) vượt rào ngẫu nhiên.
-- **Fix**: Yêu cầu duy trì số lượng điểm bất thường liên tiếp (M/N) hoặc sử dụng tính năng "Manual Silence" (đã ghi nhận trong ADR-003).
-- **Evidence Source**: Trích xuất từ file `evidence_noisy_baseline.json` (FP Rate = 0.004).
+### 4.2 Noisy baseline (false-positive trap)
+- **Scenario 5** injects high queue-depth variance with no mean shift.
+- **Behaviour**: EWMA smoothing (α=0.3) averages zero-mean noise toward 0, so the K=4σ
+  control limit is not breached → no alert. This is why FP stays at 7.1% rather than the
+  17.5% seen at K=3 (see ADR-006 tuning sweep).
 
 ## 5. Curveball impact
 
-<!-- 3 curveball - pass/fail mỗi cái + lessons learned -->
+<!-- Fill during W12 -->
 
 | Curveball | Tier | Response | Outcome | Lesson |
 |---|---|---|---|---|
@@ -110,18 +98,14 @@ Actual ─────┼─────────┼────────
 
 ## 6. Cost vs forecast
 
-| Phase | Forecast | Actual | Delta |
+| Phase | Forecast | Actual | Note |
 |---|---|---|---|
-| Dev (W11) | $5.00 | **$0.00** | -100% |
-| Testing | $10.00 | **$0.00** | -100% |
-| Buổi chấm demo | $20.00 | **$0.01 (Tiền điện server)** | -99.9% |
-
-> **Lưu ý:** Việc sử dụng AI thuần thống kê (In-house) giúp team triệt tiêu hoàn toàn chi phí token của LLM, đảm bảo dư sức vượt qua NFR về giới hạn Cost < $200.
+| Compute (serving) | Fargate 2×(0.5vCPU,1GB) 24/7 | **~$36/mo** | flat; see docs/05_cost_analysis (CDO) |
+| Inference token cost | $0 | **$0** | statistical model, no LLM tokens |
+| Training | one-off offline batch | **~$0** | manual weekly run, minutes of CPU |
 
 ## 7. Improvement next iteration
 
-<!-- Top 3 gap + plan (cho post-capstone production roadmap) -->
-
-1. **Gap**: <description> → **Plan**: ...
-2. **Gap**: ... → **Plan**: ...
-3. **Gap**: ... → **Plan**: ...
+1. **Gap**: boundary-window FP lowers precision → **Plan**: add M-of-N persistence gate + hysteresis on alert clear.
+2. **Gap**: single seasonal profile (daily) ignores weekly pattern → **Plan**: train weekly STL on ≥14 days.
+3. **Gap**: baseline refresh is manual → **Plan**: drift-triggered retrain (ADR design only for capstone).
