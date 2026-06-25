@@ -84,3 +84,19 @@
 - **Alternatives considered**:
   - Option A: Giữ nguyên Isolation Forest (rejected vì nặng và dễ báo động giả).
   - Option B: EWMA + Threshold (rejected vì độ trễ phát hiện cao khi có Sudden Spike).
+
+---
+
+## ADR-005 - Retrain Trigger Logic & Baseline Refresh Cadence
+
+- **Status**: Accepted
+- **Date**: 2026-06-25
+- **Context**: Đề bài yêu cầu có cơ chế cập nhật Baseline cho mô hình (vì workload có thể thay đổi sau mỗi đợt release tính năng mới). Tuy nhiên, việc xây dựng toàn bộ pipeline Auto-retrain là Out of Scope.
+- **Decision**: Thực hiện Manual Baseline Train 1 lần duy nhất cho W12. Retrain Trigger Logic trong thực tế sẽ dựa trên 2 điều kiện (Rule-based):
+  1. **Time-based**: Refresh định kỳ mỗi sáng Thứ Hai hàng tuần (lấy 7 ngày trước làm baseline).
+  2. **Drift-triggered**: Nếu False Positive Rate vượt quá 5% trong 24 giờ (đo lường tự động qua Brier Score report), trigger manual refresh ngay lập tức.
+- **Consequence**:
+  - ✅ Pro 1: Đáp ứng đúng yêu cầu của Client (Weekly cadence documented, manual refresh OK). Không tốn resource build Auto-pipeline.
+  - ⚠️ Trade-off 1: Đòi hỏi Data Engineer / ML Engineer phải chạy script thủ công mỗi tuần.
+- **Alternatives considered**:
+  - Option A: Auto-retrain Pipeline qua Airflow (rejected vì Out of Scope và quá tốn kém resource trong phạm vi Capstone).
