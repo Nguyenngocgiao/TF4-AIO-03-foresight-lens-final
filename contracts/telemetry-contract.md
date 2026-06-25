@@ -240,3 +240,8 @@ Mọi signal phải comply:
 - **Schema validation**: AI ingestion layer (Pydantic) validate schema; reject malformed.
 - **Data Alignment & Imputation**: Time buckets gửi vào API phải liền mạch. Nếu hạ tầng bị đứt gãy (Network jitter hoặc Drop metric), CDO **bắt buộc** phải tiền xử lý (Forward-fill hoặc Zero-fill). AI Engine sẽ văng lỗi `400` nếu phát hiện time-series bị thủng.
 - **PII**: KHÔNG được chứa PII (email, phone, name) trong signal value hoặc labels.
+
+> **Baseline coverage (Pack #1)**: AI engine train per-service STL baseline cho 4 signal chính
+> (`cpu_usage_percent`, `memory_usage_percent`, `api_latency_ms`, `queue_depth`). Các signal còn
+> lại (`active_connections`, `db_connection_pool_pct`, `cache_hit_rate_pct`) dùng fallback z-score
+> in-window khi chưa có baseline; bổ sung baseline trong W12 nếu cần.

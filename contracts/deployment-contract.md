@@ -46,9 +46,13 @@
 
 > Hệ thống sử dụng thuật toán Time-series Anomaly Detection (Thuần Thống kê học), KHÔNG dùng Bedrock LLM. Do đó, KHÔNG yêu cầu API Key của Bedrock. Việc chọn thuật toán cụ thể sẽ được ghi nhận trong ADR (Architecture Decision Record) sau khi audit dữ liệu từ CDO.
 
-| Secret name | Source |
-|---|---|
-| `AWS_REGION` | env var |
+| Config / Secret | Source | Note |
+|---|---|---|
+| `AWS_REGION` | env var | ap-southeast-1 |
+| `BASELINE_BACKEND` | env var | `s3` (prod) / `local` (dev fallback) |
+| `BASELINE_S3_BUCKET` | env var | bucket chứa per-service baseline JSON |
+| `BASELINE_S3_PREFIX` | env var | mặc định `baselines/` |
+| `AUDIT_BACKEND` / `AUDIT_S3_BUCKET` / `AUDIT_KMS_KEY_ID` | env var | audit log → S3 mã hóa KMS (prod) |
 
 ## Storage & State (TF4 Requirement)
 

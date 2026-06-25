@@ -67,7 +67,7 @@ Kiến trúc được lựa chọn dựa trên những sự đánh đổi (Trade
 
 | Risk | Likelihood | Impact | Mitigation Strategy |
 |---|---|---|---|
-| **Alert Fatigue (Cảnh báo giả quá nhiều)** | Medium | High | Sự mệt mỏi vì cảnh báo sai có thể khiến SRE phớt lờ cảnh báo thật. Giải pháp: Sử dụng **Confidence Threshold > 0.7** để chặn spike nhỏ, sử dụng STL Decomposition để khử nhiễu. Thực tế test FPR đo được chỉ là 0.0%. |
+| **Alert Fatigue (Cảnh báo giả quá nhiều)** | Medium | High | Sự mệt mỏi vì cảnh báo sai có thể khiến SRE phớt lờ cảnh báo thật. Giải pháp: Sử dụng **Confidence Threshold > 0.7** để chặn spike nhỏ, khử seasonal bằng STL + EWMA control chart (K=4.0). FPR đo thật trên holdout là 7.1% (gate ≤12%). |
 | **Data Bleed (Lẫn lộn dữ liệu Tenant)** | Low | High | Tenant A nhận cảnh báo do dữ liệu của Tenant B. Giải pháp: Ép buộc validate `X-Tenant-Id` ở tầng API. Context xử lý nội bộ của hàm tính toán khởi tạo lại (Stateless) ở mỗi HTTP request. |
 | **Flash Sale / Expected Traffic Burst** | High | Medium | Hệ thống sẽ báo động OOM vì traffic tăng gấp 10 lần vào dịp Flash Sale. Giải pháp: Khuyến nghị CDO bổ sung cơ chế **Silence Alert (Tắt cảnh báo thủ công)** trong khung giờ diễn ra sự kiện. |
 | **DDoS on AI Engine** | Medium | High | AI Engine sập do CDO gửi quá nhiều request. Giải pháp: Bật Rate Limit ở Middleware FastAPI (100 req/min/tenant). Trả HTTP 429 Too Many Requests nếu vi phạm. |
