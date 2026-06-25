@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, field_validator
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Literal
 from datetime import datetime
 import uuid
 
@@ -25,12 +25,12 @@ class PredictRequest(BaseModel):
     @field_validator('signal_window')
     @classmethod
     def check_window_size(cls, v: List[SignalDatapoint]) -> List[SignalDatapoint]:
-        if len(v) < 60:
-            raise ValueError('signal_window BẮT BUỘC phải chứa ≥ 60 datapoints (60 phút).')
+        if len(v) < 120:
+            raise ValueError('signal_window BẮT BUỘC phải chứa ≥ 120 datapoints (120 phút).')
         return v
 
 class Recommendation(BaseModel):
-    action_verb: str     # e.g., "SCALE_UP", "ROLLBACK", "RESTART"
+    action_verb: Literal["SCALE_UP", "ROLLBACK", "RESTART", "INVESTIGATE"]
     target: str          # e.g., "payment-gw ECS Service"
     from_to: str         # e.g., "3 tasks -> 5 tasks"
     confidence: float = Field(ge=0.0, le=1.0)
