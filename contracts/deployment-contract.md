@@ -11,7 +11,7 @@
 
 ## Key principle
 
-**Nhóm AI host AI engine ONCE per task force.** Các CDO infra trong task force cùng trỏ tới endpoint, multi-tenant theo `X-Tenant-Id`.
+**CDO tự host AI Engine trên platform của mình.** File contract này là tài liệu thiết kế (Blueprint/Spec) về: Compute, Scale, Secrets, Network, và Rollback. Mỗi CDO (3 nhóm trong TF4) sẽ dựa vào spec này để viết IaC và deploy Engine lên hạ tầng riêng của họ. Nhóm AI **không** tự host endpoint tập trung.
 
 ---
 
@@ -87,11 +87,13 @@ Quá trình **Model Training** (Học baseline cho từng service) sẽ được
 
 ## Per-CDO platform pointer
 
+Do mỗi CDO tự deploy engine lên hạ tầng riêng, URL sẽ thuộc về domain của từng CDO:
+
 | CDO platform | Endpoint URL | Auth |
 |---|---|---|
-| CDO-Payment | `https://ai-engine.tf-4.internal/` | IAM SigV4 |
-| CDO-Fraud | (same - shared) | IAM SigV4 |
-| CDO-Ledger | (same - shared) | IAM SigV4 |
+| CDO-Payment | `https://ai-engine.payment.cdo-1.internal/` | IAM SigV4 |
+| CDO-Fraud | `https://ai-engine.fraud.cdo-2.internal/` | IAM SigV4 |
+| CDO-Ledger | `https://ai-engine.ledger.cdo-3.internal/` | IAM SigV4 |
 
 ## Rollout strategy: Canary
 
