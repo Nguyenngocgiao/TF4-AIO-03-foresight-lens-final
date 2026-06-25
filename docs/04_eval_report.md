@@ -11,7 +11,7 @@
 | 1 | Happy Path (Normal CPU) | Happy | ALERT_ONLY |
 | 2 | Sudden Spike (CPU 50→98) | Happy | SCALE_UP |
 | 3 | Gradual Drift (CPU tăng dần→95) | Happy | anomaly=True |
-| 4 | Slow Leak (Memory 40→92 OOM) | Happy | ROLLBACK |
+| 4 | Slow Leak (Memory 40→92 OOM) | Happy | INVESTIGATE |
 | 5 | Noisy Baseline (Flash Sale traffic) | Edge | ALERT_ONLY (No FP) |
 | 6 | Sudden Drop (Throughput 1000→50) | Edge | INVESTIGATE (two-tailed) |
 | 7 | Multi-tenant Isolation | Edge | Tenant B unaffected |
