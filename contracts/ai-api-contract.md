@@ -132,8 +132,7 @@ Mỗi request tới `POST /v1/predict` bắt buộc phải được ghi log (Aud
 
 | Code | Meaning | CDO action |
 |---|---|---|
-| `400` | Bad request | Fix client code, KHÔNG retry |
-| `422` | Unprocessable Entity (Invalid input schema/data type) | Fix payload format/data type theo đúng schema, KHÔNG retry |
+| `400` | Bad request (Invalid input schema/data type) | Fix client code/payload format theo đúng schema, KHÔNG retry |
 | `401` | Auth failed | Refresh credential, retry once |
 | `429` | Rate-limited | Exponential backoff (1s → 2s → 4s ...) |
 | `503` | AI engine unavailable | Fallback to rule-based alert (CDO **bắt buộc** có fallback path) |

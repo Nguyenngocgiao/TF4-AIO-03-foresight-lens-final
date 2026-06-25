@@ -101,7 +101,7 @@ Việc đưa AI vào chuỗi quyết định vận hành IT (AIOps) đòi hỏi 
 
 | Mechanism | Implementation | Layer |
 |---|---|---|
-| Input sanitization | Pydantic Schema Validation (reject ngay `HTTP 422` nếu sai schema hoặc data type). | API Layer |
+| Input sanitization | Pydantic Schema Validation (reject ngay `HTTP 400` nếu sai schema hoặc data type). | API Layer |
 | Output schema validation | Ép buộc trả về JSON cứng, reject ngầm nếu app code lỗi định dạng. | Post-Processing |
 | Confidence threshold | Xử lý logic App-level: `confidence < 0.7` → Action verb = `INVESTIGATE`. | App layer |
 | Audit log mandatory | Mã nguồn buộc phải pass qua dòng code ghi Logger S3 trước khi trả `return response`. | App layer |
@@ -152,9 +152,9 @@ Sức mạnh của Python Pydantic được tận dụng triệt để ở lớp
 
 | Control | Description |
 |---|---|
-| Schema validation | Strict Pydantic JSON schema. Nếu thừa field, thiếu field, hệ thống reject lập tức (`HTTP 422 Unprocessable Entity`). Cấm tiệt SQL Injection / XSS lọt vào. |
+| Schema validation | Strict Pydantic JSON schema. Nếu thừa field, thiếu field, hệ thống reject lập tức (`HTTP 400 Bad Request`). Cấm tiệt SQL Injection / XSS lọt vào. |
 | Data type checks | Biến `value` bắt buộc là `float` (không được nhận chữ). Biến `ts` (Timestamp) bắt buộc chuẩn `RFC3339`. |
-| Context Isolation | Header `X-Tenant-Id` được đánh giá Validation Rule (bắt buộc). Không có header -> `HTTP 422`. |
+| Context Isolation | Header `X-Tenant-Id` được đánh giá Validation Rule (bắt buộc). Không có header -> `HTTP 400`. |
 
 ### 6.3 Security Audit Trail (Dấu vết Thanh tra Bảo mật)
 
