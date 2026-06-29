@@ -114,13 +114,13 @@ Việc đưa AI vào chuỗi quyết định vận hành IT (AIOps) đòi hỏi 
 
 | NFR ID | Category | Requirement | Control | Evidence | Owner |
 |---|---|---|---|---|---|
-| MG-01 | Governance | Quyết định AI phải giải thích được | Trường `reasoning` ≤ 300 ký tự trả về trong mọi Response | Mã nguồn engine.py | Nhóm AI |
-| MG-02 | Governance | Thanh tra toàn diện (Audit complete) | 100% lệnh AI phải lưu Audit | File log tại S3/DynamoDB | Nhóm AI |
-| MG-03 | Governance | Confidence gating | Lệnh `SCALE_UP` yêu cầu confidence ≥ 0.7 | Bằng chứng test threshold | Nhóm AI |
-| MG-04 | Performance | Độ trễ P99 < 500ms | Ứng dụng thuật toán NumPy cực nhẹ | Chỉ số Latency đo trên Postman | Nhóm AI |
-| MG-05 | Cost | Chi phí tổng < $200 | Không gọi LLM external | AWS Cost Explorer estimate | Nhóm AI |
-| MG-06 | Reliability | Fallback nếu AI Engine sập | Trả mã 503 HTTP cho CDO tự fallback | Postman 503 Scenario | CDO + AI |
-| MG-07 | Compliance | Dữ liệu PII không được lọt vào Log | Hashing thuật toán SHA-256 (`input_hash`) | Audit log mẫu | Nhóm AI |
+| MG-01 | Governance | Quyết định AI phải giải thích được | Trường `reasoning` ≤ 300 ký tự trả về trong mọi Response | `models.py` (`reasoning` Field max_length=300) + test_api.py | Nhóm AI |
+| MG-02 | Governance | Thanh tra toàn diện (Audit complete) | 100% lệnh AI phải lưu Audit (6 trường) | `audit.py` + log mẫu `final-build/logs/audit_*.jsonl` | Nhóm AI |
+| MG-03 | Governance | Confidence gating | confidence < 0.7 → downgrade về `INVESTIGATE` | `main.py` confidence gate + `evidence_confidence_threshold.json` + test_api.py | Nhóm AI |
+| MG-04 | Performance | P99 < 500ms + throughput 100 RPS | NumPy vectorized; load test đa-tenant | `evidence_load_test.json`: p99 **4ms** @100 RPS, 400 RPS clean (04_eval_report §3.3) | Nhóm AI |
+| MG-05 | Cost | Chi phí tổng < $200 | Không gọi LLM external | `evidence_cost.json` (~$36/tháng đo, 04_eval_report §6) | Nhóm AI |
+| MG-06 | Reliability | Fallback nếu AI Engine sập | Trả mã 5xx/429 cho CDO tự fallback (circuit breaker) | `main.py` rate-limit middleware (HTTP 429, 600/min/tenant) + 503/fail-open design tại deployment-contract §Failure modes | CDO + AI |
+| MG-07 | Compliance | Dữ liệu PII không được lọt vào Log | Hashing SHA-256 (`input_hash`), không lưu raw payload | Log mẫu `audit_*.jsonl` (trường `input_hash: sha256:...`) | Nhóm AI |
 | MG-08 | Drift | Cảnh báo bị trượt khỏi thực tế | Đánh giá định kỳ độ chính xác (Brier Score) | File `evidence_algorithm_evaluation.json` | Nhóm AI |
 | MG-09 | Safety | (N/A) Closed-loop tự thân | Foresight Lens là Assist-only, không tự execute | Kiến trúc Diagram | Nhóm AI |
 
