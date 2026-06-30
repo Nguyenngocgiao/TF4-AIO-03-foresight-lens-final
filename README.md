@@ -111,7 +111,6 @@ Measured on a held-out labelled day across 3 tier-1 services (see `docs/04_eval_
 | False Positive rate | 7.1% | ≤ 12% |
 | Brier score | 0.049 (well calibrated) | — |
 | Throughput | 100 RPS, p99 4 ms, 0 throttle | 100 RPS SLA |
-| Cost | ~$36 / month (Fargate 2-task HA), $0 inference | ≤ $200 / month |
 
 All numbers are reproduced from the artifacts in `tf4-evidence/evidence/` — no hardcoded values.
 
