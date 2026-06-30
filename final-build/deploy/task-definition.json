@@ -1,0 +1,44 @@
+{
+  "family": "foresight-lens-engine",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/tf-4-ecs-execution-role",
+  "taskRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/tf-4-foresight-task-role",
+  "containerDefinitions": [
+    {
+      "name": "foresight-lens",
+      "image": "<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/foresight-lens-engine:latest",
+      "essential": true,
+      "portMappings": [{ "containerPort": 8080, "protocol": "tcp" }],
+      "environment": [
+        { "name": "AWS_REGION", "value": "us-east-1" },
+        { "name": "BASELINE_BACKEND", "value": "s3" },
+        { "name": "BASELINE_S3_BUCKET", "value": "tf-4-foresight-baselines" },
+        { "name": "BASELINE_S3_PREFIX", "value": "baselines/" },
+        { "name": "AUDIT_BACKEND", "value": "s3" },
+        { "name": "AUDIT_S3_BUCKET", "value": "tf-4-foresight-audit" },
+        { "name": "AUDIT_S3_PREFIX", "value": "audit/" }
+      ],
+      "secrets": [
+        { "name": "AUDIT_KMS_KEY_ID", "valueFrom": "arn:aws:ssm:us-east-1:<ACCOUNT_ID>:parameter/tf-4/audit/kms-key-id" }
+      ],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "wget -q -O- http://localhost:8080/health || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 15
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/foresight-lens-engine",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
