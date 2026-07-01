@@ -12,7 +12,7 @@
 |---|---|---|
 | [Lab] Implement Real Inference Engine | `final-build/` (W12 production deliverable) | Hoàn thành |
 | Epic: Foresight Lens — Capstone Phase 2 (W11–W12) | Kiến trúc tổng thể & điều phối dự án | Hoàn thành |
-| [W12] Safety Guard & Multi-tenant Routing | `engine-skeleton/app/main.py` | Hoàn thành |
+| [W12] Safety Guard & Multi-tenant Routing | `final-build/app/main.py` (active) & `engine-skeleton/app/main.py` (identical) | Hoàn thành |
 
 ---
 
@@ -50,6 +50,8 @@ Safety rail quan trọng: action có impact cao như `SCALE_UP` và `ROLLBACK` b
 **Rate limiting middleware:**
 
 Sliding window rate limiter dùng `defaultdict(list)` — counter per-tenant, cửa sổ 60 giây, cap 600 request. Trả HTTP 429 kèm `Retry-After: 60`. Đặt như FastAPI middleware nên chạy trước tất cả route handler, ngăn mọi processing cost cho over-limit request.
+
+**Kết quả kiểm thử:** 9/9 pytest scenarios pass (happy path, spike, leak, drop, FP trap, missing tenant 401, <120 điểm 422, missing field 422, cross-tenant 400). Load test: 100 RPS sustained, p99=4ms, 0 lỗi. Eval trên holdout 3 service: recall 0.971, FP rate 7.1%, lead time 110 phút — tất cả pass gate client.
 
 **Time continuity check:**
 
@@ -106,7 +108,7 @@ Lý do: W12 deliverable cần là một directory tự chứa mà CDO có thể 
 
 Tôi viết `CLAUDE.md` như operational reference toàn diện: build commands, test commands, architecture summary, key directories, constraints, và eval targets.
 
-Lý do: Trong dự án nhóm, mọi developer cần biết: build cách nào, test cách nào, rules nào không được phá. Đặt vào `CLAUDE.md` tạo ra một chỗ kiểm tra thay vì phải hỏi teammate. Mục constraints (`contracts/ is FROZEN`, training deps trong `requirements-train.txt`, `final-build/` là active code) ngăn chặn một số lỗi tiềm ẩn trong W12.
+Lý do: Trong dự án nhóm, mọi developer cần biết: build cách nào, test cách nào, rules nào không được phá. Đặt vào `CLAUDE.md` tạo ra một chỗ kiểm tra thay vì phải hỏi teammate. Mục constraints (`contracts/ is FROZEN`, training deps trong `requirements-train.txt`, `final-build/` là active code) ngăn chặn một số lỗi tiềm ẩn trong W12 — cụ thể: teammate không vô tình sửa file trong `contracts/` (đã ký với CDO), không ship `statsmodels` vào Docker image, và không edit `engine-skeleton/` thay vì `final-build/`.
 
 ---
 
@@ -116,9 +118,7 @@ Những gì đã làm tốt: Quyết định skeleton quality là đòn bẩy ca
 
 Những gì cần làm khác: Tôi sẽ thêm `Makefile` với targets (`make test`, `make train`, `make build`) để giảm cognitive load khi nhớ exact command trong `CLAUDE.md`.
 
-`archive/lab-w3-AIO03-dinh/` rỗng trong state hiện tại. Tôi nên điền nó với actual lab artifacts hoặc xóa directory để giữ repo gọn.
-
-Copy-sync problem giữa `final-build/app/` và `engine-skeleton/app/` là real technical debt. Cho W13+ tôi sẽ cấu trúc lại thành `src/foresight_lens/` package mà cả hai import từ đó, loại bỏ duplication.
+Copy-sync problem giữa `final-build/app/` và `engine-skeleton/app/` là real technical debt. Cho W13+ tôi sẽ cấu trúc lại thành `src/foresight_lens/` package mà cả hai import từ đó, loại bỏ duplication. `archive/lab-w3-AIO03-dinh/` hiện rỗng — cần điền lab artifacts thực tế hoặc clean up.
 
 ---
 

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Foresight Lens — W12 Final Build</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand-primary: #1B1B19;
+  --brand-accent: #B07D33;
+  --brand-accent-2: #A8432E;
+  --brand-secondary: #1F5061;
+  --brand-danger: #A8432E;
+  --brand-success: #22c55e;
+  --text-primary: #1B1B19;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --surface-dark: #EDEAE0;
+  --surface-card: #F5F3EB;
+  --gradient-warm: linear-gradient(135deg, #B07D33, #A8432E);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; overflow-x: hidden; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--surface-dark); color: var(--text-primary); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+.slide { min-height: 100vh; width: 100%; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: clamp(32px, 5vh, 80px) clamp(24px, 5vw, 120px); position: relative; overflow: hidden; }
+.slide-title { background: var(--surface-dark); text-align: center; }
+.slide-title::before { content: ''; position: absolute; top: -30%; right: -20%; width: 60%; height: 80%; background: radial-gradient(circle, rgba(176,125,51,0.12) 0%, transparent 70%); pointer-events: none; }
+.slide-title::after { content: ''; position: absolute; bottom: -20%; left: -15%; width: 50%; height: 60%; background: radial-gradient(circle, rgba(31,80,97,0.08) 0%, transparent 70%); pointer-events: none; }
+.slide-title h1 { font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 16px; }
+.slide-title .lead { font-size: clamp(1rem, 2vw, 1.3rem); color: var(--text-secondary); max-width: 700px; }
+.gradient-text { background: var(--gradient-warm); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.slide-divider { background: var(--surface-dark); text-align: center; }
+.slide-divider::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(176,125,51,0.06) 0%, transparent 60%); pointer-events: none; }
+.section-number { font-family: 'JetBrains Mono', monospace; font-size: clamp(5rem, 12vw, 10rem); font-weight: 700; -webkit-text-stroke: 2px rgba(176,125,51,0.2); color: transparent; line-height: 1; margin-bottom: -20px; }
+.section-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--brand-accent); margin-bottom: 8px; }
+.slide-divider h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+.slide-divider .lead { font-size: clamp(0.95rem, 1.5vw, 1.15rem); color: var(--text-secondary); margin-top: 12px; max-width: 600px; }
+.slide-content { width: 100%; max-width: 1100px; }
+.slide-header { margin-bottom: clamp(20px, 3vh, 40px); }
+.slide-header h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+.slide-header .lead { font-size: clamp(0.85rem, 1.2vw, 1rem); color: var(--text-secondary); margin-top: 6px; }
+.slide-footer { position: absolute; bottom: 20px; left: 40px; right: 40px; display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.eyebrow { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--brand-accent); margin-bottom: 8px; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; }
+.badge-accent { background: rgba(176,125,51,0.15); color: var(--brand-accent); }
+.badge-blue { background: rgba(31,80,97,0.15); color: var(--brand-secondary); }
+.badge-danger { background: rgba(168,67,46,0.15); color: var(--brand-danger); }
+.badge-success { background: rgba(34,197,94,0.15); color: var(--brand-success); }
+.grid { display: grid; gap: clamp(12px, 2vw, 20px); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.card { background: var(--surface-card); border: 1px solid var(--border); border-radius: 12px; padding: clamp(16px, 2vw, 24px); transition: transform 0.3s var(--ease-out); }
+.card:hover { transform: translateY(-2px); }
+.card h3 { font-size: clamp(0.95rem, 1.4vw, 1.15rem); font-weight: 700; margin-bottom: 8px; }
+.card p, .card li { font-size: clamp(0.82rem, 1vw, 0.92rem); color: var(--text-secondary); line-height: 1.55; }
+.card-accent { background: linear-gradient(135deg, rgba(176,125,51,0.1), rgba(168,67,46,0.05)); border-color: rgba(176,125,51,0.3); }
+.card-accent h3 { color: var(--brand-accent); }
+.card-number { font-family: 'JetBrains Mono', monospace; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; color: var(--brand-accent); line-height: 1; }
+.card-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+.flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+.flow-step { background: var(--surface-card); border: 1px solid var(--border); border-radius: 10px; padding: clamp(10px, 1.5vw, 18px) clamp(14px, 2vw, 22px); text-align: center; font-size: clamp(0.78rem, 1vw, 0.9rem); font-weight: 600; }
+.flow-arrow { color: var(--brand-accent); font-size: 1.3rem; padding: 0 8px; flex-shrink: 0; }
+.bullets { list-style: none; padding: 0; }
+.bullets li { padding: 8px 0 8px 24px; position: relative; font-size: clamp(0.88rem, 1.1vw, 0.98rem); color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+.bullets li:last-child { border-bottom: none; }
+.bullets li::before { content: ''; position: absolute; left: 0; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: var(--brand-accent); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); align-items: start; }
+table { width: 100%; border-collapse: collapse; font-size: clamp(0.8rem, 1vw, 0.9rem); }
+th { text-align: left; padding: 10px 14px; background: var(--surface-card); color: var(--brand-accent); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 2px solid rgba(176,125,51,0.3); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+code { font-family: 'JetBrains Mono', monospace; font-size: 0.88em; background: rgba(176,125,51,0.08); color: var(--brand-accent); padding: 2px 6px; border-radius: 4px; }
+.progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--gradient-warm); z-index: 1000; width: 0%; transition: width 0.3s; }
+.nav-dots { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 8px; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(148,163,184,0.4); cursor: pointer; transition: all 0.3s; border: none; padding: 0; }
+.nav-dot.active { background: var(--brand-accent); transform: scale(1.4); }
+.slide-counter { position: fixed; bottom: 20px; right: 24px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted); z-index: 1000; }
+.slide-counter strong { color: var(--text-primary); }
+.slide-closing { text-align: center; }
+.slide-closing h2 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+.blockquote { border-left: 4px solid var(--brand-accent); padding: 16px 24px; font-style: italic; color: var(--text-secondary); font-size: clamp(0.95rem, 1.3vw, 1.1rem); margin-bottom: 24px; background: var(--surface-card); border-radius: 0 12px 12px 0; }
+.blockquote cite { display: block; margin-top: 8px; font-style: normal; font-size: 0.8rem; color: var(--text-muted); }
+@media (max-width: 767px) { .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;} .two-col{grid-template-columns:1fr;} .flow{flex-direction:column;} .flow-arrow{transform:rotate(90deg);} .nav-dots{display:none;} }
+@media (max-height: 700px) { .slide { padding: 24px 20px; } }
+@media (prefers-reduced-motion: reduce) { html{scroll-behavior:auto;} }
+@media print {
+  @page { size: 1920px 1080px; margin: 0; }
+  html, body {
+    width: 1920px !important;
+    height: auto !important;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+    background: var(--surface-dark) !important;
+  }
+  .slide { 
+    width: 1920px !important;
+    height: 1080px !important;
+    min-height: 1080px !important;
+    overflow: hidden !important; 
+    page-break-after: always; 
+    page-break-inside: avoid; 
+    padding: 60px 120px !important;
+    position: relative !important;
+  }
+  .slide-content { padding: 40px; transform: scale(1.4); transform-origin: center center; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .nav-dots, .progress-bar, .slide-counter { display: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progress"></div>
+<nav class="nav-dots" id="navDots"></nav>
+<div class="slide-counter" id="counter"><strong>01</strong> / 18</div>
+
+<!-- Slide 1: Title -->
+<section class="slide slide-title">
+  <div class="eyebrow">XBrain Capstone · Task Force 4 · AIO-03</div>
+  <h1>Foresight <span class="gradient-text">Lens</span></h1>
+  <p class="lead">A capacity-exhaustion prediction engine for tier-1 cloud services.</p>
+  <div style="margin-top:24px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <span style="padding:6px 14px; background:var(--surface-card); border:1px solid var(--border); border-radius:8px; font-size:0.8rem; color:var(--text-secondary);">Lead time ≥ 15 min</span>
+    <span style="padding:6px 14px; background:var(--surface-card); border:1px solid var(--border); border-radius:8px; font-size:0.8rem; color:var(--text-secondary);">Inference ~$0 cost</span>
+    <span style="padding:6px 14px; background:var(--surface-card); border:1px solid var(--border); border-radius:8px; font-size:0.8rem; color:var(--text-secondary);">Model ewma-stl-v1</span>
+  </div>
+  <div style="margin-top:24px; max-width:700px; width:100%;">
+    <div style="background:var(--surface-card); border:1px solid var(--border); border-radius:12px; padding:18px;">
+      <svg viewBox="0 0 800 220" style="width:100%; height:auto;">
+        <rect width="800" height="220" fill="var(--surface-card)" rx="8"/>
+        <line x1="60" y1="70" x2="740" y2="70" stroke="#B07D33" stroke-width="2" stroke-dasharray="8 6"/>
+        <text x="745" y="74" fill="#B07D33" font-family="JetBrains Mono" font-size="10" font-weight="700">4σ control limit</text>
+        <path d="M60 160 C 150 158 250 155 350 148 C 420 140 470 120 520 90 C 560 68 590 50 640 35" fill="none" stroke="#1F5061" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="520" cy="90" r="8" fill="#EDEAE0" stroke="#1F5061" stroke-width="4"/>
+        <text x="520" y="115" text-anchor="middle" fill="#1F5061" font-family="Plus Jakarta Sans" font-size="10" font-weight="700">● alert · t₀</text>
+        <circle cx="640" cy="35" r="7" fill="#A8432E"/>
+        <text x="640" y="25" text-anchor="middle" fill="#A8432E" font-family="Plus Jakarta Sans" font-size="10" font-weight="700">● SLO breach</text>
+        <line x1="520" y1="180" x2="640" y2="180" stroke="#B07D33" stroke-width="2"/>
+        <text x="580" y="195" text-anchor="middle" fill="#B07D33" font-family="JetBrains Mono" font-size="9">◀ 110 min lead ▶</text>
+        <text x="60" y="175" fill="#94a3b8" font-family="Plus Jakarta Sans" font-size="9">— EWMA (α=0.3)</text>
+      </svg>
+      <p style="font-size:0.78rem; color:var(--text-muted); margin-top:8px; text-align:center;">Fig. 1 — EWMA control chart raises an alert ~110 min before the de-seasonalised signal breaches the SLO.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: Section divider -->
+<section class="slide slide-divider">
+  <div class="section-number">02</div>
+  <div class="section-label">Client Context</div>
+  <h2>When the monitor turns <span class="gradient-text">red</span>, it's already too late</h2>
+  <p class="lead">Reactive monitoring fires at 99% — no lead time for SRE.</p>
+</section>
+
+<!-- Slide 3: Client Context -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Client Context</div>
+      <h2>Hard constraints from the client</h2>
+    </div>
+    <div class="blockquote">
+      "When the monitor turns red, the system is <strong>already down</strong>. We need to predict the incident early enough for SRE to intervene — but we don't want the AI to act on its own, and the monthly bill must stay <strong>under $200</strong>."
+      <cite>— Client interview · W11</cite>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><div class="card-number">≤ $200</div><div class="card-label">total monthly spend</div></div>
+      <div class="card"><div class="card-number">Advise</div><div class="card-label">no auto-remediation</div></div>
+      <div class="card"><div class="card-number">3 svc</div><div class="card-label">Payment · Fraud · Ledger</div></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>02 — Client Context</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 4: Section divider -->
+<section class="slide slide-divider">
+  <div class="section-number">03</div>
+  <div class="section-label">Problem</div>
+  <h2>Reactive monitoring alerts <span class="gradient-text">too late</span></h2>
+  <p class="lead">The signal is visible for 90+ minutes, yet the threshold triggers at the cliff edge.</p>
+</section>
+
+<!-- Slide 5: Problem -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Problem</div>
+      <h2>Four forces driving the need for prediction</h2>
+    </div>
+    <div class="grid grid-2">
+      <div class="card"><h3>01 · Slow exhaustion, sudden collapse</h3><p>Memory leak → OOM, CPU starvation, connection-pool &amp; queue backlog.</p></div>
+      <div class="card"><h3>02 · Reactive, not predictive</h3><p>Thresholds fire at 99% — no lead time to scale up or restart.</p></div>
+      <div class="card"><h3>03 · AIOps tools are heavy &amp; costly</h3><p>Market platforms blow past the $200 budget at this scale.</p></div>
+      <div class="card"><h3>04 · Auto-remediation is distrusted</h3><p>Fear of an AI shutting down healthy servers by mistake.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>03 — Problem</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 6: Section divider -->
+<section class="slide slide-divider">
+  <div class="section-number">04</div>
+  <div class="section-label">Outcomes</div>
+  <h2>Predict early, advise clearly — <span class="gradient-text">never act alone</span></h2>
+  <p class="lead">An advisor, not an actor. The CDO platform owns every action.</p>
+</section>
+
+<!-- Slide 7: Outcomes -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Outcomes</div>
+      <h2>Four measurable outcomes</h2>
+    </div>
+    <div class="grid grid-4">
+      <div class="card"><div class="card-number">110</div><div class="card-label">min lead time</div><p style="margin-top:8px;">Flag capacity exhaustion ≥ 15 min before SLO breach.</p></div>
+      <div class="card"><div class="card-number">3</div><div class="card-label">tenants isolated</div><p style="margin-top:8px;">Per-service baselines, zero cross-tenant bleed.</p></div>
+      <div class="card"><div class="card-number">$0</div><div class="card-label">token cost</div><p style="margin-top:8px;">In-house statistical model — no LLM tokens.</p></div>
+      <div class="card"><div class="card-number">5</div><div class="card-label">action verbs</div><p style="margin-top:8px;">Action, target, confidence &amp; evidence per alert.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>04 — Outcomes</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 8: Section divider -->
+<section class="slide slide-divider">
+  <div class="section-number">05</div>
+  <div class="section-label">How it works</div>
+  <h2>STL <span class="gradient-text">+</span> EWMA</h2>
+  <p class="lead">De-seasonalise, then detect sustained drift.</p>
+</section>
+
+<!-- Slide 9: Algorithm -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Algorithm</div>
+      <h2>Two-step detection — offline STL + real-time EWMA</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="card" style="margin-bottom:14px;"><h3>STEP 1 · STL offline</h3><p>Learn each service's daily load curve from clean days; store seasonal profile + residual σ. Removes the season that fools naïve detectors.</p></div>
+        <div class="card"><h3>STEP 2 · EWMA inference</h3><p>Run a control chart on the residual. Sustained drift breaches the K=4σ limit → anomaly. One-off spikes are smoothed away.</p></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card"><div class="card-number">&lt; 10 ms</div><div class="card-label">compute / call</div></div>
+        <div class="card"><div class="card-number">100%</div><div class="card-label">deterministic &amp; explainable</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>05 — Algorithm</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 10: Why not LLM -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Decision</div>
+      <h2>Why not an LLM?</h2>
+      <p class="lead">For infrastructure time-series, exact math beats generated text.</p>
+    </div>
+    <table>
+      <thead><tr><th>Approach</th><th>Cost / mo</th><th>Latency</th><th>FP rate</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td><strong>STL + EWMA</strong> control chart</td><td>~$36</td><td>&lt;10 ms</td><td>7.1%</td><td><span class="badge badge-success">✓ chosen</span></td></tr>
+        <tr><td>Isolation Forest contamination 0.02</td><td>~$150</td><td>~20 ms</td><td>21.4%</td><td><span class="badge badge-danger">FP gate fail</span></td></tr>
+        <tr><td>LLM (Bedrock) per-window prompt</td><td>~$10k</td><td>~2 s</td><td>—</td><td><span class="badge badge-danger">cost + hallucination</span></td></tr>
+      </tbody>
+    </table>
+    <div class="card card-accent" style="margin-top:16px;"><p style="margin:0;"><strong>ADR-001 · ADR-004</strong> — a 4σ breach is a sentence any engineer can defend.</p></div>
+  </div>
+  <div class="slide-footer"><span>05 — Decision</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 11: Architecture -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Architecture</div>
+      <h2>Stateless, one-directional request path</h2>
+    </div>
+    <div class="flow">
+      <div class="flow-step">CDO Platform</div><span class="flow-arrow">→</span>
+      <div class="flow-step">POST /v1/predict</div><span class="flow-arrow">→</span>
+      <div class="flow-step">FastAPI + Pydantic</div><span class="flow-arrow">→</span>
+      <div class="flow-step">STL + EWMA Engine</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Decision Router</div><span class="flow-arrow">→</span>
+      <div class="flow-step" style="border-color:var(--brand-accent);">RECOMMENDATION</div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><h3>S3 Baselines</h3><p>Per-service baselines (KMS-encrypted). Read each request.</p></div>
+      <div class="card"><h3>Audit Trail</h3><p>SHA-256 input hash → CloudWatch / S3. 6-field log.</p></div>
+      <div class="card"><h3>SRE Gate</h3><p>Manual approval — humans keep the decision. No auto-remediation.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>06 — Architecture</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 12: Contracts -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Contracts</div>
+      <h2>Three signed contracts — frozen W11</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><h3>01 · Telemetry</h3><ul class="bullets"><li>7 gauges · CPU, memory, latency, pool…</li><li>1-min granularity, RFC3339 UTC</li><li>Mandatory <code>tenant_id</code> · no PII</li></ul></div>
+      <div class="card"><h3>02 · AI API</h3><ul class="bullets"><li><code>POST /v1/predict</code></li><li>SLA: p99 &lt; 500 ms · 100 RPS · 99.5%</li><li>Errors 400 / 401 / 422 / 429 / 503</li></ul></div>
+      <div class="card"><h3>03 · Deployment</h3><ul class="bullets"><li>ECS Fargate · 0.5 vCPU / 1 GB</li><li>min 2 / max 4 · canary 10→50→100</li><li>$200 cost circuit breaker</li></ul></div>
+    </div>
+    <div class="card card-accent" style="margin-top:16px;"><p style="margin:0;"><strong>Schema unchanged W11 → W12</strong> — CDO never rewrites code.</p></div>
+  </div>
+  <div class="slide-footer"><span>07 — Contracts</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 13: Evaluation -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Evidence</div>
+      <h2>Evaluation results — measured, not hard-coded</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><div class="card-number">0.971</div><div class="card-label">Recall · gate ≥ 0.80 ✓</div></div>
+      <div class="card"><div class="card-number">7.1%</div><div class="card-label">FP rate · gate ≤ 12% ✓</div></div>
+      <div class="card"><div class="card-number">110 m</div><div class="card-label">Lead time · gate ≥ 15m ✓</div></div>
+      <div class="card"><div class="card-number">0.049</div><div class="card-label">Brier · &lt; 0.10 ✓ calibrated</div></div>
+      <div class="card"><div class="card-number">0.793</div><div class="card-label">Precision · stretch ≥ 0.75 ✓</div></div>
+      <div class="card"><div class="card-number">9/9</div><div class="card-label">Pytest scenarios pass</div></div>
+    </div>
+    <div class="two-col" style="margin-top:16px;">
+      <div class="card"><h3>A/B · same holdout</h3><p><strong>STL + EWMA:</strong> .971 · FP 7.1%<br><strong>Isolation Forest:</strong> .638 · FP 21.4%</p></div>
+      <div class="card"><h3>Confusion matrix · 3 svc</h3><p><strong>TP</strong> 169 &nbsp; <strong>FN</strong> 5<br><strong>FP</strong> 44 &nbsp; <strong>TN</strong> 574</p></div>
+    </div>
+    <p style="font-size:0.78rem; color:var(--text-muted); margin-top:12px;">Measured on ~790 sliding windows, 3 tier-1 services. Re-run: <code>tf4_evidence.py</code></p>
+  </div>
+  <div class="slide-footer"><span>08 — Evidence</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 14: Cost model -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">FinOps</div>
+      <h2>Cost model — ~$36/month</h2>
+    </div>
+    <div class="grid grid-2">
+      <div class="card"><div class="card-number">~$36</div><div class="card-label">/ month</div><p style="margin-top:8px;">Fargate 2-task HA, flat. Measured — not a forecast.</p></div>
+      <div class="card"><div class="card-number">18%</div><div class="card-label">budget used</div><p style="margin-top:8px;">Alert at $160. Circuit breaker at $200 → scale to zero.</p></div>
+      <div class="card"><div class="card-number">$0</div><div class="card-label">inference tokens</div><p style="margin-top:8px;">No LLM in the loop.</p></div>
+      <div class="card"><div class="card-number">&lt;$1</div><div class="card-label">marginal / tenant</div><p style="margin-top:8px;">Scales to thousands.</p></div>
+    </div>
+    <div class="card card-accent" style="margin-top:16px;"><p style="margin:0;"><strong>Budget priority:</strong> $200 cap outranks 99.5% SLA — fail-open, CDO falls back to rules.</p></div>
+  </div>
+  <div class="slide-footer"><span>09 — FinOps</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 15: Safety -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Safety</div>
+      <h2>Six guardrails — defense in depth</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><h3>01 · GATE</h3><p>Confidence gating — Below 0.7 → downgrade SCALE_UP to INVESTIGATE.</p></div>
+      <div class="card"><h3>02 · ASSIST-ONLY</h3><p>Never executes — Recommends only; no closed-loop auto-remediation.</p></div>
+      <div class="card"><h3>03 · AUDIT</h3><p>6-field audit log — SHA-256 input hash, KMS-encrypted, no raw PII.</p></div>
+      <div class="card"><h3>04 · FAIL-OPEN</h3><p>Graceful degrade — 5xx → CDO falls back to rule-based alerts.</p></div>
+      <div class="card"><h3>05 · ISOLATION</h3><p>Per-request scoping — X-Tenant-Id enforced; stateless — zero data bleed.</p></div>
+      <div class="card"><h3>06 · RATE LIMIT</h3><p>Noisy-neighbour guard — 600 req/min/tenant → 429 with backoff.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>10 — Safety</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 16: ADRs -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">ADRs</div>
+      <h2>Six architecture decision records</h2>
+    </div>
+    <div class="grid grid-2">
+      <div class="card"><h3>ADR-001</h3><p>Statistical model over LLM — Exactness &amp; $0 tokens vs. natural-language RCA.</p></div>
+      <div class="card"><h3>ADR-002</h3><p>Confidence threshold 0.7 — Between 0.5 (too loose) and 0.8 (too strict).</p></div>
+      <div class="card"><h3>ADR-003</h3><p>Manual silence for flash sales — Reliable 99% of the year; no blunted sensitivity.</p></div>
+      <div class="card"><h3>ADR-004</h3><p>STL+EWMA over Isolation Forest — Proven by measured A/B: better recall &amp; FP.</p></div>
+      <div class="card"><h3>ADR-005</h3><p>Weekly + drift-triggered retrain — Manual cadence; no auto-pipeline in scope.</p></div>
+      <div class="card"><h3>ADR-006</h3><p>EWMA α = 0.3, K = 4.0 — From a 16-point sweep. K=3 fails FP, K=4.5 costs recall.</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>11 — ADRs</span><span>Foresight Lens</span></div>
+</section>
+
+<!-- Slide 17: Closing -->
+<section class="slide slide-closing slide-title">
+  <div class="eyebrow">What we shipped</div>
+  <h2>All client gates met,<br><span class="gradient-text">with margin</span></h2>
+  <p class="lead" style="max-width:780px; margin: 0 auto;">A working FastAPI engine on stateless Fargate, with reproducible evidence — ready for W12 final build.</p>
+  <div class="grid grid-4" style="margin-top:32px; max-width:800px; width:100%;">
+    <div class="card" style="text-align:center;"><div class="card-number">~$36</div><div class="card-label">18% of budget</div></div>
+    <div class="card" style="text-align:center;"><div class="card-number">3</div><div class="card-label">contracts signed</div></div>
+    <div class="card" style="text-align:center;"><div class="card-number">9/9</div><div class="card-label">tests pass</div></div>
+    <div class="card" style="text-align:center;"><div class="card-number">110 min</div><div class="card-label">lead time</div></div>
+  </div>
+</section>
+
+<!-- Slide 18: Appendix -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="slide-header">
+      <div class="eyebrow">Appendix</div>
+      <h2>Backup slides</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>EWMA parameter sweep</h3>
+        <table><thead><tr><th>α</th><th>K</th><th>FP%</th><th>recall</th></tr></thead>
+        <tbody>
+          <tr><td>0.3</td><td>3.0</td><td>17.5</td><td>.977</td></tr>
+          <tr style="font-weight:700;"><td>0.3</td><td>4.0</td><td>7.1</td><td>.971</td></tr>
+          <tr><td>0.3</td><td>4.5</td><td>6.5</td><td>.966</td></tr>
+          <tr><td>0.15</td><td>4.0</td><td>11.8</td><td>.977</td></tr>
+        </tbody></table>
+        <p style="margin-top:8px; font-size:0.78rem;">Chosen α=0.3, K=4.0 — best FP margin while holding recall.</p>
+      </div>
+      <div class="card">
+        <h3>Telemetry · 7 signals</h3>
+        <ul class="bullets">
+          <li><code>cpu_usage_percent</code></li>
+          <li><code>memory_usage_percent</code></li>
+          <li><code>api_latency_ms</code></li>
+          <li><code>queue_depth</code></li>
+          <li><code>active_connections</code></li>
+          <li><code>db_connection_pool_pct</code></li>
+          <li><code>cache_hit_rate_pct</code></li>
+        </ul>
+        <p style="margin-top:8px; font-size:0.78rem;">4 baselined · 3 z-score fallback. 1-min, 90-day retention.</p>
+      </div>
+      <div class="card">
+        <h3>API error codes</h3>
+        <table><thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>400</code></td><td>tenant/data mismatch · no retry</td></tr>
+          <tr><td><code>401</code></td><td>missing X-Tenant-Id / auth</td></tr>
+          <tr><td><code>422</code></td><td>schema · &lt;120 points</td></tr>
+          <tr><td><code>429</code></td><td>rate limit · backoff</td></tr>
+          <tr><td><code>503</code></td><td>unavailable → CDO fallback</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Appendix</span><span>Foresight Lens</span></div>
+</section>
+
+<script>
+class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll('.slide');
+    this.current = 0;
+    this.total = this.slides.length;
+    document.getElementById('counter').innerHTML = `<strong>01</strong> / ${String(this.total).padStart(2, '0')}`;
+    this.buildNavDots();
+    this.bindEvents();
+    this.observe();
+  }
+  buildNavDots() {
+    const nav = document.getElementById('navDots');
+    this.slides.forEach((s, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => this.scrollTo(i));
+      nav.appendChild(dot);
+    });
+  }
+  bindEvents() {
+    document.addEventListener('keydown', e => {
+      if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+        e.preventDefault(); this.scrollTo(Math.min(this.current + 1, this.total - 1));
+      } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+        e.preventDefault(); this.scrollTo(Math.max(this.current - 1, 0));
+      } else if (e.key === 'Home') this.scrollTo(0);
+      else if (e.key === 'End') this.scrollTo(this.total - 1);
+    });
+    document.addEventListener('scroll', () => {
+      const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      document.getElementById('progress').style.width = `${p * 100}%`;
+    });
+  }
+  observe() {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const idx = [...this.slides].indexOf(e.target);
+          this.current = idx;
+          document.getElementById('counter').innerHTML = `<strong>${String(idx + 1).padStart(2, '0')}</strong> / ${String(this.total).padStart(2, '0')}`;
+          document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+      });
+    }, { threshold: 0.5 });
+    this.slides.forEach(s => io.observe(s));
+  }
+  scrollTo(idx) { this.slides[idx].scrollIntoView({ behavior: 'smooth' }); }
+}
+document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+</script>
+</body>
+</html>

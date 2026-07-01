@@ -1,2 +1,156 @@
-<?xml version='1.0' encoding='utf-8'?>
-<mxfile host="Electron" modified="2026-06-24T00:00:00.000Z" agent="Python script" etag="xyz" version="24.0.0" type="device"><diagram name="Page-1" id="117b6486-e562-46e2-a1a3-0caec88dcebc"><mxGraphModel dx="1000" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0"><root><mxCell id="0" /><mxCell id="1" parent="0" /><mxCell id="2" value="Closed-loop Safety Pattern" style="rounded=1;fillColor=#F4F8FC;strokeColor=#232F3E;strokeWidth=2;dashed=1;verticalAlign=top;align=left;fontSize=16;fontStyle=1;fontColor=#232F3E;spacingLeft=15;spacingTop=10;shadow=0;" vertex="1" parent="1"><mxGeometry x="40" y="40" width="740" height="450" as="geometry" /></mxCell><mxCell id="3" value="🚨 Anomaly&#10;Detected" style="rounded=1;fillColor=#FFF2E8;strokeColor=#ED7100;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#ED7100;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="80" y="100" width="120" height="60" as="geometry" /></mxCell><mxCell id="4" value="🎛️ Blast-Radius&#10;Check" style="rounded=1;fillColor=#E0F2FE;strokeColor=#0284C7;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#0284C7;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="260" y="100" width="120" height="60" as="geometry" /></mxCell><mxCell id="5" value="⚠️ Exceeds Limit" style="rounded=1;fillColor=#FCE4EC;strokeColor=#E7157B;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#E7157B;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="260" y="220" width="120" height="60" as="geometry" /></mxCell><mxCell id="6" value="👨‍💻 Escalate&#10;to Human" style="rounded=1;fillColor=#F3F4F6;strokeColor=#4B5563;strokeWidth=2;fontSize=14;fontStyle=1;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="80" y="220" width="120" height="60" as="geometry" /></mxCell><mxCell id="7" value="🧪 Dry-Run Sandbox" style="rounded=1;fillColor=#E0F2FE;strokeColor=#0284C7;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#0284C7;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="440" y="100" width="140" height="60" as="geometry" /></mxCell><mxCell id="8" value="✅ Execute Action" style="rounded=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#059669;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="620" y="100" width="120" height="60" as="geometry" /></mxCell><mxCell id="9" value="🔍 Verify Metric" style="rounded=1;fillColor=#E0F2FE;strokeColor=#0284C7;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#0284C7;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="620" y="220" width="120" height="60" as="geometry" /></mxCell><mxCell id="10" value="⏪ Auto Rollback" style="rounded=1;fillColor=#FCE4EC;strokeColor=#E7157B;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#E7157B;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="440" y="220" width="140" height="60" as="geometry" /></mxCell><mxCell id="11" value="📝 Audit Log" style="rounded=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#059669;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="620" y="340" width="120" height="60" as="geometry" /></mxCell><mxCell id="12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="2" source="3" target="4"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="13" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="2" source="4" target="5"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="2" source="5" target="6"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="15" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="2" source="4" target="7"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="16" value="Pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="2" source="7" target="8"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="17" value="Fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="2" source="7" target="6"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="510" y="310" /><mxPoint x="140" y="310" /></Array></mxGeometry></mxCell><mxCell id="18" value="Wait N sec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="2" source="8" target="9"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="19" value="Pass" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="2" source="9" target="11"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="20" value="Fail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="2" source="9" target="10"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="21" value="Logged" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="2" source="10" target="11"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="600" y="370" /></Array></mxGeometry></mxCell><mxCell id="22" value="Logged" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="2" source="6" target="11"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="140" y="440" /><mxPoint x="680" y="440" /></Array></mxGeometry></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile host="Electron" agent="Codex">
+  <diagram id="action" name="AI Action Loop">
+    <mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <mxCell id="title" parent="1" style="text;html=1;resizable=0;points=[];autosize=0;align=left;verticalAlign=top;spacingTop=-4;fontSize=30;fontStyle=1;fontFamily=Helvetica;fontColor=#232F3E;whiteSpace=wrap;" value="TF4 Closed-loop Safety Pattern" vertex="1">
+          <mxGeometry height="42" width="1200" x="40" y="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="subtitle" parent="1" style="text;html=1;resizable=0;points=[];autosize=0;align=left;verticalAlign=top;spacingTop=-4;fontSize=16;fontStyle=0;fontFamily=Helvetica;fontColor=#555555;whiteSpace=wrap;" value="Safe execution flow: detect, verify blast radius, dry-run, execute, verify, and audit." vertex="1">
+          <mxGeometry height="34" width="1500" x="42" y="63" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="sep" parent="1" style="line;strokeWidth=2;html=1;strokeColor=#FF9900;" value="" vertex="1">
+          <mxGeometry height="10" width="1320" x="40" y="92" as="geometry" />
+        </mxCell>
+
+        <mxCell id="aws-cloud" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=14;fontStyle=1;container=0;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=#F8FAFC;verticalAlign=top;align=left;spacingLeft=34;fontColor=#232F3E;dashed=0;fontFamily=Helvetica;" value="Safety &amp;amp; Execution Pipeline" vertex="1">
+          <mxGeometry height="420" width="1240" x="40" y="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="grp-det" parent="1" style="fillColor=#FFF2E8;strokeColor=#ED7100;rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=12;fontColor=#ED7100;fontFamily=Helvetica;container=1;collapsible=0;shadow=1;strokeWidth=1.5;arcSize=4;" value="Detection" vertex="1">
+          <mxGeometry height="140" width="180" x="80" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ic-anomaly" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Anomaly Detected&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="138" y="230" as="geometry" />
+        </mxCell>
+
+        <mxCell id="grp-ver" parent="1" style="fillColor=#E0F2FE;strokeColor=#0284C7;rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=12;fontColor=#0284C7;fontFamily=Helvetica;container=1;collapsible=0;shadow=1;strokeWidth=1.5;arcSize=4;" value="Verification Gate" vertex="1">
+          <mxGeometry height="320" width="340" x="320" y="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ic-blast" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#0284C7;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Blast-Radius Check&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="360" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="ic-dryrun" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#0284C7;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Dry-Run Sandbox&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="550" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="ic-limit" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.shield;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Exceeds Limit&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="360" y="380" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ic-escalate" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#4B5563;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.users;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Escalate to Human&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="138" y="380" as="geometry" />
+        </mxCell>
+
+        <mxCell id="grp-exec" parent="1" style="fillColor=#E8F5E9;strokeColor=#2E7D32;rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=12;fontColor=#2E7D32;fontFamily=Helvetica;container=1;collapsible=0;shadow=1;strokeWidth=1.5;arcSize=4;" value="Execution &amp;amp; Audit" vertex="1">
+          <mxGeometry height="320" width="500" x="720" y="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ic-exec" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Execute Action&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="760" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="ic-verify" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#0284C7;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Verify Metric&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="960" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="ic-rollback" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Auto Rollback&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="960" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="ic-audit" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Audit Log (S3)&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="1110" y="380" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-anomaly" target="ic-blast">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-blast" target="ic-limit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Yes&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="e2">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-limit" target="ic-escalate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-blast" target="ic-dryrun">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;No&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=12;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="e4">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-dryrun" target="ic-exec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Pass&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=12;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="e5">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-dryrun" target="ic-escalate">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="582" y="330" />
+              <mxPoint x="170" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell value="&lt;b&gt;Fail&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=12;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="e6">
+          <mxGeometry x="-0.8" y="0" relative="1" as="geometry">
+            <mxPoint x="20" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-exec" target="ic-verify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Wait N sec&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=12;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="e7">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-verify" target="ic-audit">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1142" y="262" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell value="&lt;b&gt;Pass&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=12;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="e8">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-verify" target="ic-rollback">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Fail&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="e9">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#232F3E;dashed=1;" edge="1" parent="1" source="ic-rollback" target="ic-audit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Logged&lt;/b&gt;" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=12;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="e10">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
