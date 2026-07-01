@@ -111,13 +111,21 @@ correctly throttled to HTTP 429 (anti-abuse), confirming the rate limiter works.
 
 ## 5. Curveball impact
 
-<!-- Fill during W12 -->
+Three adaptation curveballs of increasing difficulty were run against the **real engine**
+(not hand-scored). Scenarios are synthesised and every outcome is measured by
+`tf4-evidence/curveball_eval.py` (deterministic, seed=20260701) →
+`evidence/evidence_curveball.json`. No number in the table below is hand-written.
 
-| Curveball | Tier | Response | Outcome | Lesson |
-|---|---|---|---|---|
-| #1 small (T5 W11) | Small | <how engine adapted> | Pass/Partial/Fail | ... |
-| #2 medium (T2 W12) | Medium | ... | ... | ... |
-| #3 chaos (T4 W12) | Chaos | ... | ... | ... |
+| Curveball | Tier | Twist | Engine response (measured) | Outcome | Lesson |
+|---|---|---|---|---|---|
+| #1 (T5 W11) | Small | New `checkout-svc` onboarded mid-incident with **no trained baseline**, then a real gradual CPU exhaustion | Fell back to in-window z-score; first alert t=134 min, SLO breach t=203 → **69-min lead**, no hard-fail | **Pass** | Graceful degradation holds — an unregistered service still gets ≥15-min warning, just less lead than a baselined one |
+| #2 (T2 W12) | Medium | Planned **Flash Sale**: sustained +12pp CPU step that stays benign (peak 50%, never near the 90% SLO) | Flagged the sustained deviation 4 min after the step — a false positive vs. intent | **Partial** | Engine has no business-calendar context; needs a **"Silence & Retrain"** control during known events (ADR-003) |
+| #3 (T4 W12) | Chaos | Correlated multi-service cascade under 2–3× noise: payment-gw memory leak → fraud-detector CPU ramp, plus a ledger pure-noise distractor | Caught **both** real drifts (mem-leak **85-min** lead, CPU-ramp **53-min** lead = 2/2); the 3× noise distractor produced 7 spurious alerts | **Partial** | Real cascades caught with wide lead; extreme noise inflates FP → add the **M-of-N persistence gate** (§7, item 1) before alerting |
+
+**Net**: the engine held ≥15-min lead on every genuine capacity-exhaustion event even under
+cold-start (#1) and a heavy-noise cascade (#3). The two Partials are operational/tuning gaps
+(business-calendar silence; persistence gate) — not detection failures — and both are already
+tracked in §7 and ADR-003.
 
 ## 6. Cost vs forecast
 

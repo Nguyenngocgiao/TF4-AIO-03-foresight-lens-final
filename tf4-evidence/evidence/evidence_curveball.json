@@ -1,0 +1,53 @@
+{
+  "method": "Scenarios designed for W12 curveball drill; scored on the REAL engine (STL + EWMA, alpha=0.3, K=4.0), sliding 120-min window step 5. Deterministic (seed=20260701), reproducible.",
+  "gates": "FP <= 12%, Catch >= 80%, Lead >= 15 min",
+  "curveball_1_small": {
+    "tier": "Small",
+    "scenario": "New service 'checkout-svc' onboarded mid-incident with NO trained baseline; a real gradual CPU exhaustion follows.",
+    "twist": "No STL baseline -> engine must fall back to in-window z-score (graceful degradation).",
+    "breach_min": 203,
+    "detected": true,
+    "first_alert_min": 134,
+    "lead_min": 69,
+    "outcome": "Pass"
+  },
+  "curveball_2_medium": {
+    "tier": "Medium",
+    "scenario": "Planned Flash Sale: payment-gw CPU jumps to a sustained higher plateau (+12pp) that never breaches the 90% SLO (peak 50.3%).",
+    "twist": "Structural, benign shift vs baseline -> known false-positive risk (ADR-003).",
+    "false_alarm": true,
+    "first_alarm_min": 134,
+    "min_after_step": 4,
+    "outcome": "Partial",
+    "lesson": "Engine correctly flags the sustained deviation but has no business-calendar context; mitigate with manual 'Silence & Retrain' during known events (ADR-003)."
+  },
+  "curveball_3_chaos": {
+    "tier": "Chaos",
+    "scenario": "Correlated cascade: payment-gw memory leak triggers a downstream fraud-detector CPU ramp, all under 2x-3x telemetry noise, plus a ledger pure-noise distractor.",
+    "twist": "Multi-service, multi-metric, noisy; must catch the 2 real drifts AND not false-alarm on the noise-only distractor.",
+    "services": {
+      "payment_gw_memory_leak": {
+        "role": "real_anomaly",
+        "breach_min": 204,
+        "detected": true,
+        "first_alert_min": 119,
+        "lead_min": 85
+      },
+      "fraud_detector_cpu_ramp": {
+        "role": "real_anomaly",
+        "breach_min": 187,
+        "detected": true,
+        "first_alert_min": 134,
+        "lead_min": 53
+      },
+      "ledger_noise_distractor": {
+        "role": "fp_trap",
+        "alerts": 7,
+        "stayed_silent": false
+      }
+    },
+    "real_caught": "2/2",
+    "false_positives_on_distractor": 1,
+    "outcome": "Partial"
+  }
+}
