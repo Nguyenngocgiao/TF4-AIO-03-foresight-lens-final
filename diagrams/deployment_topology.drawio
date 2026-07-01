@@ -1,2 +1,88 @@
-<?xml version='1.0' encoding='utf-8'?>
-<mxfile host="Electron" modified="2026-06-24T00:00:00.000Z" agent="Python script" etag="xyz" version="24.0.0" type="device"><diagram name="Page-1" id="9c28090f-22ab-4f18-a742-875f1b60054b"><mxGraphModel dx="1000" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0"><root><mxCell id="0" /><mxCell id="1" parent="0" /><mxCell id="2" value="VPC Task Force 4" style="rounded=1;fillColor=#F4F8FC;strokeColor=#232F3E;strokeWidth=2;dashed=1;verticalAlign=top;align=left;fontSize=16;fontStyle=1;fontColor=#232F3E;spacingLeft=15;spacingTop=10;shadow=0;" vertex="1" parent="1"><mxGeometry x="260" y="40" width="780" height="420" as="geometry" /></mxCell><mxCell id="3" value="Private Subnet" style="rounded=1;fillColor=#F4F8FC;strokeColor=#232F3E;strokeWidth=2;dashed=1;verticalAlign=top;align=left;fontSize=16;fontStyle=1;fontColor=#232F3E;spacingLeft=15;spacingTop=10;shadow=0;" vertex="1" parent="1"><mxGeometry x="280" y="100" width="720" height="340" as="geometry" /></mxCell><mxCell id="4" value="🌐 CDO Payment" style="rounded=1;fillColor=#E0F2FE;strokeColor=#0284C7;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#0284C7;shadow=1;whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="40" y="100" width="160" height="60" as="geometry" /></mxCell><mxCell id="5" value="🌐 CDO Fraud" style="rounded=1;fillColor=#E0F2FE;strokeColor=#0284C7;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#0284C7;shadow=1;whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="40" y="200" width="160" height="60" as="geometry" /></mxCell><mxCell id="6" value="🌐 CDO Ledger" style="rounded=1;fillColor=#E0F2FE;strokeColor=#0284C7;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#0284C7;shadow=1;whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="40" y="300" width="160" height="60" as="geometry" /></mxCell><mxCell id="7" value="⚖️ Internal ALB" style="rounded=1;fillColor=#F3E8FF;strokeColor=#9333EA;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#9333EA;shadow=1;whiteSpace=wrap;" vertex="1" parent="3"><mxGeometry x="320" y="200" width="140" height="60" as="geometry" /></mxCell><mxCell id="8" value="🐳 ECS Fargate Task 1" style="rounded=1;fillColor=#FFF2E8;strokeColor=#ED7100;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#ED7100;shadow=1;whiteSpace=wrap;" vertex="1" parent="3"><mxGeometry x="540" y="140" width="160" height="60" as="geometry" /></mxCell><mxCell id="9" value="🐳 ECS Fargate Task 2" style="rounded=1;fillColor=#FFF2E8;strokeColor=#ED7100;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#ED7100;shadow=1;whiteSpace=wrap;" vertex="1" parent="3"><mxGeometry x="540" y="260" width="160" height="60" as="geometry" /></mxCell><mxCell id="10" value="🔐 Secrets Manager VPCe" style="rounded=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#059669;shadow=1;whiteSpace=wrap;" vertex="1" parent="2"><mxGeometry x="540" y="40" width="160" height="40" as="geometry" /></mxCell><mxCell id="11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="1" source="4" target="7"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="1" source="5" target="7"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="1" source="6" target="7"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="1" source="7" target="8"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;" edge="1" parent="1" source="7" target="9"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;dashed=1;" edge="1" parent="1" source="8" target="10"><mxGeometry relative="1" as="geometry" /></mxCell><mxCell id="17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontColor=#333333;fontSize=12;fontStyle=1;dashed=1;" edge="1" parent="1" source="9" target="10"><mxGeometry relative="1" as="geometry" /></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile host="Electron" agent="Codex">
+  <diagram id="deploy" name="Deployment Topology">
+    <mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <mxCell id="title" parent="1" style="text;html=1;resizable=0;points=[];autosize=0;align=left;verticalAlign=top;spacingTop=-4;fontSize=30;fontStyle=1;fontFamily=Helvetica;fontColor=#232F3E;whiteSpace=wrap;" value="TF4 Deployment Topology" vertex="1">
+          <mxGeometry height="42" width="1200" x="40" y="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="subtitle" parent="1" style="text;html=1;resizable=0;points=[];autosize=0;align=left;verticalAlign=top;spacingTop=-4;fontSize=16;fontStyle=0;fontFamily=Helvetica;fontColor=#555555;whiteSpace=wrap;" value="ECS Fargate tasks in Private Subnet, internal ALB for CDO traffic, VPC Endpoint for Secrets Manager." vertex="1">
+          <mxGeometry height="34" width="1500" x="42" y="63" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="sep" parent="1" style="line;strokeWidth=2;html=1;strokeColor=#FF9900;" value="" vertex="1">
+          <mxGeometry height="10" width="1320" x="40" y="92" as="geometry" />
+        </mxCell>
+
+        <mxCell id="grp-cdo" parent="1" style="fillColor=#FFF2E8;strokeColor=#ED7100;rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=14;fontColor=#ED7100;fontFamily=Helvetica;container=1;collapsible=0;shadow=1;strokeWidth=1.5;arcSize=4;" value="CDO Platforms" vertex="1">
+          <mxGeometry height="400" width="220" x="40" y="140" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ic-payment" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.traditional_server;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;CDO Payment&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="118" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="ic-fraud" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.traditional_server;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;CDO Fraud&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="118" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="ic-ledger" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.traditional_server;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;CDO Ledger&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="118" y="420" as="geometry" />
+        </mxCell>
+
+        <mxCell id="aws-cloud" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=14;fontStyle=1;container=0;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=#F8FAFC;verticalAlign=top;align=left;spacingLeft=34;fontColor=#232F3E;dashed=0;fontFamily=Helvetica;" value="AWS Cloud / VPC Task Force 4" vertex="1">
+          <mxGeometry height="420" width="1040" x="320" y="140" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="grp-subnet" parent="1" style="fillColor=#E0F2FE;strokeColor=#0284C7;rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=12;fontColor=#0284C7;fontFamily=Helvetica;container=1;collapsible=0;shadow=1;strokeWidth=1.5;arcSize=4;" value="Private Subnet" vertex="1">
+          <mxGeometry height="360" width="600" x="360" y="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ic-alb" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#0284C7;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.application_load_balancer;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Internal ALB&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="420" y="300" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ic-fargate1" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;ECS Fargate Task 1&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="720" y="240" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ic-fargate2" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#2E7D32;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;ECS Fargate Task 2&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="720" y="400" as="geometry" />
+        </mxCell>
+
+        <mxCell id="grp-sm" parent="1" style="fillColor=#FCE4EC;strokeColor=#E7157B;rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=12;fontColor=#E7157B;fontFamily=Helvetica;container=1;collapsible=0;shadow=1;strokeWidth=1.5;arcSize=4;" value="AWS Services" vertex="1">
+          <mxGeometry height="160" width="200" x="1060" y="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ic-sm" parent="1" style="sketch=0;points=[];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.endpoint;fontFamily=Helvetica;shadow=1;" value="&lt;b&gt;Secrets Manager VPCe&lt;/b&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="1128" y="240" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-payment" target="ic-alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-fraud" target="ic-alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-ledger" target="ic-alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-alb" target="ic-fargate1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#232F3E;" edge="1" parent="1" source="ic-alb" target="ic-fargate2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#232F3E;dashed=1;" edge="1" parent="1" source="ic-fargate1" target="ic-sm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#232F3E;dashed=1;" edge="1" parent="1" source="ic-fargate2" target="ic-sm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
