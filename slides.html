@@ -22,6 +22,28 @@
       --surface-card: #F5F3EB;
       --gradient-warm: linear-gradient(135deg, #B07D33, #A8432E);
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+      .grid-4 {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+      .two-col {
+        grid-template-columns: 1fr 1fr !important;
+        display: grid !important;
+      }
+      /* Reset any flex columns */
+      .flow {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+      }
+      .flow-arrow {
+        transform: rotate(0deg) !important;
+      }
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-snap-type: y mandatory; scroll-behavior: smooth; overflow-x: hidden; }
@@ -114,20 +136,41 @@
         flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
-        padding: 0.5in 0.8in !important;
+        padding: 0.4in 0.8in !important;
         box-sizing: border-box !important;
         overflow: hidden !important;
+        zoom: 0.8 !important;
       }
       .progress-bar, .nav-dots, .slide-counter {
         display: none !important;
       }
       /* Scale down image sizes for print to prevent overflowing the 9in height limit */
       img {
-        max-height: 3.5in !important;
+        max-height: 2.2in !important; /* Scale down slightly more */
         object-fit: contain !important;
       }
       svg {
-        max-height: 2.5in !important;
+        max-height: 2.0in !important;
+      }
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+      .grid-4 {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+      .two-col {
+        grid-template-columns: 1fr 1fr !important;
+        display: grid !important;
+      }
+      .flow {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+      }
+      .flow-arrow {
+        transform: rotate(0deg) !important;
       }
     }
   </style>
