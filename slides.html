@@ -1290,26 +1290,31 @@
       <h2>Statistical Rigor & Holdout Evaluation</h2>
       <p class="lead"><strong>Method:</strong> STL(period=1440) seasonal baseline + EWMA(α=0.3) control chart, K=4.0 | <strong>Setup:</strong> 3 services, holdout day, 120-min sliding window step 5 (22% prevalence).</p>
     </div>
-    <div class="grid grid-4" style="margin-bottom: 24px;">
-      <div class="card card-accent" style="text-align: center;">
-        <div class="card-number">0.971</div>
-        <div class="card-label">Catch Rate (Recall)</div>
-        <p style="font-size: 0.7rem; margin-top:8px;">95% CI: [0.935, 0.988]<br>TP / (TP + FN)</p>
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 24px;">
+      <div class="card card-accent" style="text-align: center; padding: 16px 8px;">
+        <div class="card-number" style="font-size: 2.2rem;">0.971</div>
+        <div class="card-label" style="font-size: 0.7rem;">Recall (Catch)</div>
+        <p style="font-size: 0.65rem; margin-top:8px; line-height: 1.3;">95% CI: [0.935, 0.988]<br>Client Gate: &ge; 80%</p>
       </div>
-      <div class="card card-accent" style="text-align: center;">
-        <div class="card-number">7.1<span style="font-size:0.5em">%</span></div>
-        <div class="card-label">False Positive Rate</div>
-        <p style="font-size: 0.7rem; margin-top:8px;">95% CI: [5.3%, 9.4%]<br>Client Gate: ≤ 12%</p>
+      <div class="card card-accent" style="text-align: center; padding: 16px 8px;">
+        <div class="card-number" style="font-size: 2.2rem;">0.793</div>
+        <div class="card-label" style="font-size: 0.7rem;">Precision</div>
+        <p style="font-size: 0.65rem; margin-top:8px; line-height: 1.3;">95% CI: [0.734, 0.842]<br>F1-Score: 0.873</p>
       </div>
-      <div class="card" style="text-align: center;">
-        <div class="card-number">110</div>
-        <div class="card-label">Minutes Lead Time</div>
-        <p style="font-size: 0.7rem; margin-top:8px;">Median: 110 min (Min: 80m)<br>Samples: 80, 150, 80, 140, 80, 150</p>
+      <div class="card card-accent" style="text-align: center; padding: 16px 8px;">
+        <div class="card-number" style="font-size: 2.2rem;">7.1<span style="font-size:0.5em">%</span></div>
+        <div class="card-label" style="font-size: 0.7rem;">False Positive Rate</div>
+        <p style="font-size: 0.65rem; margin-top:8px; line-height: 1.3;">95% CI: [5.3%, 9.4%]<br>Client Gate: &le; 12%</p>
       </div>
-      <div class="card" style="text-align: center;">
-        <div class="card-number">0.0493</div>
-        <div class="card-label">Brier Score</div>
-        <p style="font-size: 0.7rem; margin-top:8px;">BSS: 71.23% (UNC: 0.1714)<br>Precision: 0.793 (F1: 0.873)</p>
+      <div class="card" style="text-align: center; padding: 16px 8px;">
+        <div class="card-number" style="font-size: 2.2rem;">110</div>
+        <div class="card-label" style="font-size: 0.7rem;">Minutes Lead Time</div>
+        <p style="font-size: 0.65rem; margin-top:8px; line-height: 1.3;">Median: 110m (Min: 80m)<br>Samples: [80, 150...]</p>
+      </div>
+      <div class="card" style="text-align: center; padding: 16px 8px;">
+        <div class="card-number" style="font-size: 2.2rem;">0.0493</div>
+        <div class="card-label" style="font-size: 0.7rem;">Brier Score</div>
+        <p style="font-size: 0.65rem; margin-top:8px; line-height: 1.3;">BSS: 71.23%<br>UNC: 0.1714 | CAL: ~0</p>
       </div>
     </div>
 
