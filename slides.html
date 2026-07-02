@@ -270,7 +270,7 @@
         <li><strong>High Precision:</strong> FP rate &le; 12%, detecting &ge; 80% of drifts.</li>
         <li><strong>Cost Control:</strong> Total monthly AWS bill strictly under $200.</li>
         <li><strong>Multi-tenant Security:</strong> Applied to 3 tier-1 services with isolated baselines and zero cross-tenant bleed.</li>
-        <li><strong>No Auto-remediation:</strong> AI strictly acts as an advisor (PURELY Predictive) without system intervention.</li>
+        <li><strong>No Auto-remediation:</strong> The engine strictly acts as an advisor (PURELY Predictive) without system intervention.</li>
         <li><strong>Per-service Baseline:</strong> Train baselines per service (1 manual run) + ADRs defining retrain triggers.</li>
         <li><strong>Actionable Recommendation:</strong> Must include 5 components (action verb, target, from&rarr;to, confidence, evidence).</li>
         <li><strong>Audit Log:</strong> Log every prediction request, encrypted at rest.</li>
@@ -495,7 +495,7 @@
     <div class="slide-header" style="text-align: center; margin-bottom: 30px;">
       <div class="eyebrow">Measurable Outcomes (3/4)</div>
       <h2 style="font-size: clamp(2.5rem, 5vw, 4rem); margin: 10px 0;"><span class="gradient-text">$0</span> Token Cost</h2>
-      <p class="lead" style="font-size: 1.15rem; max-width: 700px; margin: 0 auto;">In-house statistical model costs zero LLM tokens. Complete AWS footprint runs at ~$53/month.</p>
+      <p class="lead" style="font-size: 1.15rem; max-width: 700px; margin: 0 auto;">In-house statistical model has zero token dependencies. Complete AWS footprint runs at ~$53/month.</p>
     </div>
     
     <div class="diagram" style="white-space: pre-wrap; word-break: break-word; text-align: left; box-shadow: 0 10px 30px -10px rgba(176,125,51,0.15);">
@@ -892,7 +892,7 @@
     <div class="slide-header">
       <div class="eyebrow">Algorithmic Rationale · Governance</div>
       <h2>An Advisor, Not an Autonomous Actor</h2>
-      <p class="lead">SREs fundamentally distrust "black-box" AI restarting their production servers.</p>
+      <p class="lead">SREs fundamentally distrust autonomous "black-box" automation restarting their production servers.</p>
     </div>
     <div class="two-col" style="gap: 40px; margin-top: 24px;">
       <div>
@@ -915,7 +915,7 @@
   </div>
   <div class="slide-footer">
     <span>TF4 FORESIGHT LENS</span>
-    <span>AI GOVERNANCE</span>
+    <span>SYSTEM GOVERNANCE</span>
   </div>
 </section>
 
@@ -923,13 +923,13 @@
 <section class="slide">
   <div class="slide-content" style="max-width: 1100px; text-align: center;">
     <div class="slide-header" style="margin-bottom: 20px; text-align: left;">
-      <div class="eyebrow">AI Governance</div>
-      <h2>AI Advisor Action Loop</h2>
+      <div class="eyebrow">Governance</div>
+      <h2>Predictive Advisor Action Loop</h2>
       <p class="lead">Foresight Lens acts strictly as a predictive advisor, routing alerts for human SRE authorization.</p>
     </div>
     
     <div class="card" style="padding: 16px; background: #fff; border: 1px solid var(--border); border-radius: 12px; display: inline-flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); max-width: 900px; margin: 0 auto;">
-      <img src="diagrams/03_ai_action_loop.png" alt="AI Action Loop" class="diagram-large" style="width: 100%; max-height: 5.2in; object-fit: contain; border-radius: 8px;" />
+      <img src="diagrams/03_ai_action_loop.png" alt="Predictive Action Loop" class="diagram-large" style="width: 100%; max-height: 5.2in; object-fit: contain; border-radius: 8px;" />
     </div>
     
     <p style="margin-top: 16px; font-size: 0.82rem; color: var(--text-secondary); max-width: 800px; margin-left: auto; margin-right: auto;">
@@ -938,7 +938,7 @@
   </div>
   <div class="slide-footer">
     <span>TF4 FORESIGHT LENS</span>
-    <span>AI GOVERNANCE</span>
+    <span>GOVERNANCE</span>
   </div>
 </section>
 
@@ -1109,7 +1109,7 @@
         <p style="margin-top: 12px; font-size: 0.8rem;"><strong>Imputation strictly enforced.</strong> Missing data yields immediate HTTP 400 Bad Request.</p>
       </div>
       <div class="card card-accent">
-        <h3 style="margin-bottom: 12px;">02 · AI API (Additive v1.1)</h3>
+        <h3 style="margin-bottom: 12px;">02 · Predictive API (Additive v1.1)</h3>
         <div class="diagram">
 // POST /v1/predict
 {
@@ -1397,7 +1397,7 @@ final-build/tests/test_api.py .........              [100%]
           <li><strong>S3 & KMS (~$1):</strong> Baseline JSON storage and audit log encryption.</li>
         </ul>
         <p style="margin-top: 16px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 12px;">
-          <strong>Strategic Advantage:</strong> Decoupled from expensive SIEM platforms and unpredictable GenAI API token spikes.
+          <strong>Strategic Advantage:</strong> Decoupled from expensive SIEM platforms and unpredictable external API token charges.
         </p>
       </div>
     </div>
@@ -1465,14 +1465,14 @@ final-build/tests/test_api.py .........              [100%]
 <section class="slide">
   <div class="slide-content">
     <div class="slide-header">
-      <div class="eyebrow">AI Governance</div>
+      <div class="eyebrow">Predictive Governance</div>
       <h2>Security-by-Design & Defense in Depth</h2>
-      <p class="lead">GenAI risks (Prompt Injection, Hallucination) are mathematically impossible in a statistical engine.</p>
+      <p class="lead">Generative AI failure modes (such as hallucination or prompt injection) are mathematically eliminated by our deterministic design.</p>
     </div>
     <div class="grid grid-3">
       <div class="card">
         <h3>01 · Deterministic Output</h3>
-        <p>Same JSON in, same output out. Reproducible mathematical execution with zero hallucination.</p>
+        <p>Same JSON in, same output out. Reproducible mathematical execution with zero random execution deviation.</p>
       </div>
       <div class="card">
         <h3>02 · Confidence Gating</h3>
@@ -1498,7 +1498,7 @@ final-build/tests/test_api.py .........              [100%]
   </div>
   <div class="slide-footer">
     <span>TF4 FORESIGHT LENS</span>
-    <span>AI GOVERNANCE</span>
+    <span>PREDICTIVE GOVERNANCE</span>
   </div>
 </section>
 
@@ -1515,8 +1515,8 @@ final-build/tests/test_api.py .........              [100%]
     </div>
     <div class="grid grid-3" style="gap: 20px;">
       <div class="card" style="padding: 20px;">
-        <h3 style="font-size: 0.95rem; color: var(--brand-accent);">ADR-001: Statistical vs LLM</h3>
-        <p style="font-size: 0.82rem; margin-top: 8px;"><strong>Chosen:</strong> STL + EWMA.<br><strong>Rationale:</strong> Bedrock latency (seconds) and monthly costs ($10k+) made GenAI unviable. Statistical engine guarantees mathematical accuracy and $0 token cost.</p>
+        <h3 style="font-size: 0.95rem; color: var(--brand-accent);">ADR-001: Statistical vs Large Language Model</h3>
+        <p style="font-size: 0.82rem; margin-top: 8px;"><strong>Chosen:</strong> STL + EWMA.<br><strong>Rationale:</strong> Large language model latency (seconds) and monthly API costs ($10k+) made GenAI unviable. The statistical engine guarantees mathematical accuracy and $0 token cost.</p>
       </div>
       <div class="card" style="padding: 20px;">
         <h3 style="font-size: 0.95rem; color: var(--brand-accent);">ADR-002: Confidence Threshold</h3>
@@ -1733,7 +1733,7 @@ final-build/tests/test_api.py .........              [100%]
             <tr>
               <td><code>503 Unavailable</code></td>
               <td>Engine failure (e.g. timeout or database down)</td>
-              <td><strong>Fail-open:</strong> CDO bypasses AI, falls back to rules.</td>
+              <td><strong>Fail-open:</strong> CDO bypasses the engine, falls back to rules.</td>
             </tr>
           </tbody>
         </table>
