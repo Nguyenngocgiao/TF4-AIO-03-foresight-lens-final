@@ -900,11 +900,11 @@
           Since both classifiers (STL+EWMA and Isolation Forest) were evaluated on the <strong>exact same 792 sliding windows</strong>, their outcomes are paired. A paired test of proportions (McNemar's) is used rather than comparing independent CIs.
         </p>
         <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px;">
-          With a calculated test statistic of <strong style="color: var(--brand-accent);">$\chi^2 = 13.9$</strong>, the $p\text{-value}$ is approximately <strong style="color: var(--brand-accent);">0.0002</strong>. We reject the null hypothesis $H_0$ at $p < 0.001$. The superiority of our statistical approach is mathematically guaranteed and not a sampling artifact.
+          With a calculated test statistic of <strong style="color: var(--brand-accent);">χ² = 13.9</strong>, the p-value is approximately <strong style="color: var(--brand-accent);">0.0002</strong>. We reject the null hypothesis H₀ at p &lt; 0.001. The superiority of our statistical approach is mathematically guaranteed and not a sampling artifact.
         </p>
         <div class="card card-accent" style="padding: 12px 16px; display: inline-block;">
           <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--brand-accent); margin-bottom: 4px;">Hypothesis Test Formula</div>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-primary);">\chi^2 = \frac{(|b - c| - 1)^2}{b + c} \approx 13.9</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: var(--text-primary); font-weight: bold;">χ² = (|b - c| - 1)² / (b + c) ≈ 13.9</div>
         </div>
       </div>
       
@@ -932,7 +932,7 @@
           </tbody>
         </table>
         <p style="margin-top: 12px; font-size: 0.8rem; color: var(--text-secondary); text-align: center; font-style: italic;">
-          Ties (both correct or both wrong) carry no information. The test proves EWMA significantly outperforms IForest ($p < 0.001$).
+          Ties (both correct or both wrong) carry no information. The test proves EWMA significantly outperforms IForest (p &lt; 0.001).
         </p>
       </div>
     </div>
@@ -955,9 +955,9 @@
       <div>
         <h3 style="margin-bottom: 12px; color: var(--brand-accent); font-size: 1.1rem;">Why Wiener-Brownian MC was Rejected:</h3>
         <ul class="bullets" style="font-size: 0.9rem; line-height: 1.55;">
-          <li><strong>Mean-Reversion Violation:</strong> System metrics (CPU, Memory) are mean-reverting, not a random walk. Brownian motion has unbounded variance ($h \to \infty$), inflating confidence interval tails.</li>
-          <li><strong>Computational Complexity:</strong> Inference requires simulation of $S=10,000$ paths $\times$ 120 points ($O(N \cdot S) \approx 1.2M$ ops) vs. exact EWMA calculation ($O(N) \approx 120$ ops).</li>
-          <li><strong>Parameter Instability:</strong> Estimating drift ($\mu$) on short 120-point windows introduces high variance, leading to false positive inflation.</li>
+          <li><strong>Mean-Reversion Violation:</strong> System metrics (CPU, Memory) are mean-reverting, not a random walk. Brownian motion has unbounded variance (h ➔ ∞), inflating confidence interval tails.</li>
+          <li><strong>Computational Complexity:</strong> Inference requires simulation of S=10,000 paths × 120 points (O(N · S) ≈ 1.2M operations) vs. exact EWMA calculation (O(N) ≈ 120 operations).</li>
+          <li><strong>Parameter Instability:</strong> Estimating drift (μ) on short 120-point windows introduces high variance, leading to false positive inflation.</li>
         </ul>
       </div>
       
@@ -990,7 +990,7 @@
           </tbody>
         </table>
         <div style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.45; border-top: 1px solid var(--border); padding-top: 8px;">
-          <strong>Asymptotic Derivation:</strong> $\text{Var}(z_T) \to \hat{\sigma}^2_R \frac{\alpha}{2-\alpha}$ as $T \to \infty$. This exact limit allows us to calculate the control limit $\Lambda = K \hat{\sigma}_R \sqrt{\alpha/(2-\alpha)}$ deterministically in a single step.
+          <strong>Asymptotic Derivation:</strong> Var(z<sub>T</sub>) ➔ σ<sub>R</sub>² · α / (2 - α) as T ➔ ∞. This exact limit allows us to calculate the control limit Λ = K · σ<sub>R</sub> · &radic;(α / (2 - α)) deterministically in a single step.
         </div>
       </div>
     </div>
@@ -1922,7 +1922,7 @@ final-build/tests/test_api.py .........              [100%]
             <tr>
               <td style="padding: 6px 10px; font-weight: bold;">Uncertainty (UNC)</td>
               <td style="padding: 6px 10px; font-family: 'JetBrains Mono';">0.1714</td>
-              <td style="padding: 6px 10px;">Irreducible noise in the anomaly labels themselves ($\bar{p}(1-\bar{p})$).</td>
+              <td style="padding: 6px 10px;">Irreducible noise in the anomaly labels themselves: p̅(1 - p̅).</td>
             </tr>
             <tr>
               <td style="padding: 6px 10px; font-weight: bold;">Resolution (RES)</td>
@@ -1937,12 +1937,12 @@ final-build/tests/test_api.py .........              [100%]
             <tr style="border-top: 2px solid var(--brand-accent);">
               <td style="padding: 6px 10px; font-weight: bold;">Brier Score (BS)</td>
               <td style="padding: 6px 10px; font-family: 'JetBrains Mono'; font-weight: bold;">0.0493</td>
-              <td style="padding: 6px 10px; font-weight: bold;">Total error ($BS = 0.1714 - 0.1221 + 0 \approx 0.049$).</td>
+              <td style="padding: 6px 10px; font-weight: bold;">Total error (BS = 0.1714 - 0.1221 + 0 ≈ 0.049).</td>
             </tr>
           </tbody>
         </table>
         <div style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.45; border-top: 1px solid var(--border); padding-top: 8px;">
-          <strong>Brier Skill Score (BSS) = RES / UNC = 71.23%</strong>: Indicates that our model resolves 71.23% of the inherent uncertainty over a naive baseline forecaster that always predicts the base rate ($\bar{p} \approx 22\%$).
+          <strong>Brier Skill Score (BSS) = RES / UNC = 71.23%</strong>: Indicates that our model resolves 71.23% of the inherent uncertainty over a naive baseline forecaster that always predicts the base rate (p̅ ≈ 22%).
         </div>
       </div>
     </div>
