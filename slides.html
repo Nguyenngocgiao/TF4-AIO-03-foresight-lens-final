@@ -977,34 +977,59 @@
       <h2>Automated Data & Deployment Pipelines</h2>
       <p class="lead">Ensuring reproducible training, stateless inference, and serverless containerized deployments.</p>
     </div>
-    <div class="grid grid-3" style="margin-top: 32px;">
-      <div class="card">
-        <h3>1. Offline Training Pipeline</h3>
-        <p style="margin-bottom: 12px;">Processes raw historical telemetry to extract expected seasonality profiles.</p>
-        <ul class="bullets">
-          <li><strong>Execution:</strong> Script <code>scripts/train_baseline.py</code> runs weekly or on demand.</li>
-          <li><strong>STL Decomposition:</strong> Bocks out daily normal humps (period = 1440).</li>
-          <li><strong>Artifacts:</strong> Per-service baseline JSON (S3) + evaluation holdout datasets.</li>
-        </ul>
+    
+    <div class="pipelines-container" style="display: flex; flex-direction: column; gap: 20px; width: 100%; margin-top: 24px;">
+      <!-- Pipeline 1: Offline Training -->
+      <div class="card" style="padding: 14px 20px; background: var(--surface-card);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+          <h3 style="margin-bottom: 0; font-size: 0.95rem; color: var(--brand-accent);"><span class="badge badge-accent" style="margin-right: 8px;">Weekly Cadence</span> 1. Offline Training Pipeline</h3>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);">scripts/train_baseline.py</span>
+        </div>
+        <div class="flow" style="justify-content: flex-start; gap: 6px;">
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">7-Day TSDB Metrics</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">STL Decomposition</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">Extract Minute Profile</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem; border-color: var(--brand-accent);">Save S3 Baselines</div>
+        </div>
       </div>
-      <div class="card card-accent">
-        <h3>2. Real-Time Inference Pipeline</h3>
-        <p style="margin-bottom: 12px;">FastAPI request path to evaluate capacity exhaustion alerts under 10ms.</p>
-        <ul class="bullets">
-          <li><strong>Payload Validation:</strong> Pydantic checks schema integrity & 120-min window constraint.</li>
-          <li><strong>De-seasonalise:</strong> Subtracts seasonal profile baseline from live signals.</li>
-          <li><strong>EWMA Chart:</strong> Checks if residuals breach K-sigma (4.0σ) limits.</li>
-          <li><strong>Integrity:</strong> Inputs SHA-256 hashed and recorded in S3/KMS audit logs.</li>
-        </ul>
+
+      <!-- Pipeline 2: Real-time Inference -->
+      <div class="card card-accent" style="padding: 14px 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+          <h3 style="margin-bottom: 0; font-size: 0.95rem; color: var(--brand-accent);"><span class="badge badge-success" style="margin-right: 8px;">Live API</span> 2. Real-Time Inference Pipeline</h3>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--brand-secondary);">POST /v1/predict (&lt;10ms)</span>
+        </div>
+        <div class="flow" style="justify-content: flex-start; gap: 6px;">
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">120m Input</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">Pydantic Schema</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">Subtract Seasonal</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">EWMA Control Chart</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem; border-color: var(--brand-accent);">SHA-256 KMS Audit</div>
+        </div>
       </div>
-      <div class="card">
-        <h3>3. Deployment Pipeline</h3>
-        <p style="margin-bottom: 12px;">Containerized serverless packaging for target cloud execution.</p>
-        <ul class="bullets">
-          <li><strong>Build Path:</strong> <code>Dockerfile</code> packaging using Python 3.13 slim base image.</li>
-          <li><strong>Fargate Task:</strong> ECS task configuration allocates 1.0 vCPU and 2.0 GB memory limits.</li>
-          <li><strong>Auto-Scale:</strong> Minimum 2 / Maximum 4 replicas dynamically managed on CPU threshold.</li>
-        </ul>
+
+      <!-- Pipeline 3: Deployment -->
+      <div class="card" style="padding: 14px 20px; background: var(--surface-card);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px;">
+          <h3 style="margin-bottom: 0; font-size: 0.95rem; color: var(--brand-accent);"><span class="badge badge-blue" style="margin-right: 8px;">AWS ECS Fargate</span> 3. Deployment Pipeline</h3>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted);">Dockerfile &amp; task-definition.json</span>
+        </div>
+        <div class="flow" style="justify-content: flex-start; gap: 6px;">
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">Code Push</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">Dockerfile Build</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem;">Push ECR Image</div>
+          <div class="flow-arrow" style="font-size: 1rem;">➔</div>
+          <div class="flow-step" style="padding: 6px 12px; font-size: 0.78rem; border-color: var(--brand-accent);">Fargate Scale (2-4 Tasks)</div>
+        </div>
       </div>
     </div>
   </div>
