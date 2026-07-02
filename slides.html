@@ -1151,7 +1151,90 @@
   </div>
 </section>
 
+<!-- ========== SLIDE: Automated Testing ========== -->
+<section class="slide">
+  <div class="slide-content" style="max-width: 1100px;">
+    <div class="slide-header">
+      <div class="eyebrow">Quality Assurance</div>
+      <h2>Automated Test Suite & API Verification</h2>
+      <p class="lead">9/9 automated test cases passing to validate boundaries, tenant isolation, and engine alert logic.</p>
+    </div>
+    
+    <div class="two-col" style="gap: 30px; margin-top: 24px;">
+      <!-- Left Column: Test Case list -->
+      <div class="card" style="padding: 20px; background: var(--surface-card);">
+        <h3 style="color: var(--brand-accent); font-size: 1.1rem; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px;">Automated Pytest Suite</h3>
+        <ul style="list-style: none; padding: 0; font-size: 0.8rem; line-height: 1.6;">
+          <li style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 5px 0;">
+            <span><code>test_health_check</code>: Verify /health returns status healthy</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+          <li style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 5px 0;">
+            <span><code>test_detect_happy_path</code>: Normal load ➔ Anomaly: False</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+          <li style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 5px 0;">
+            <span><code>test_detect_sudden_spike</code>: CPU Spike ➔ SCALE_UP</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+          <li style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 5px 0;">
+            <span><code>test_detect_slow_leak</code>: RAM Leak ➔ ROLLBACK</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+          <li style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 5px 0;">
+            <span><code>test_detect_sudden_drop</code>: Throughput Drop ➔ INVESTIGATE</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+          <li style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 5px 0;">
+            <span><code>test_missing_tenant_id_is_401</code>: No Tenant Header ➔ HTTP 401</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+          <li style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 5px 0;">
+            <span><code>test_less_than_120_points_is_422</code>: Window &lt; 120m ➔ HTTP 422</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+          <li style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 5px 0;">
+            <span><code>test_missing_field_is_422</code>: Missing Payload Fields ➔ HTTP 422</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+          <li style="display: flex; justify-content: space-between; align-items: center; padding: 5px 0;">
+            <span><code>test_tenant_id_mismatch_is_400</code>: Header-Body Mismatch ➔ HTTP 400</span>
+            <span class="badge badge-success">PASS</span>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Right Column: Console output + log verification -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="card" style="padding: 16px; background: #1B1B19;">
+          <h3 style="color: #fff; font-size: 0.9rem; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">$ pytest final-build/tests/test_api.py</h3>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: #22c55e; white-space: pre; line-height: 1.4;">=================== test session starts ===================
+platform linux -- Python 3.13.13, pytest-8.3.4
+collected 9 items
 
+final-build/tests/test_api.py .........              [100%]
+
+==================== 9 passed in 0.25s ====================</div>
+        </div>
+        
+        <div class="card card-accent" style="padding: 16px;">
+          <h3 style="font-size: 0.9rem; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace;">logs/audit_20260702.jsonl</h3>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(176,125,51,0.08); padding: 10px; border-radius: 6px; color: var(--brand-accent); word-break: break-all; white-space: pre-wrap;">{
+  "audit_id": "4719c685-75e2-4bde-aab9-8c9402a6c480",
+  "timestamp": "2026-07-02T02:01:07.838Z",
+  "tenant_id": "tenant-cdo-demo",
+  "input_hash": "sha256:5a433ec54b95c23aaf16409f93c123a4efb72...",
+  "recommendation_snapshot": null
+}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>TF4 FORESIGHT LENS</span>
+    <span>QUALITY ASSURANCE</span>
+  </div>
+</section>
 
 <!-- ========== SLIDE: Load Test ========== -->
 <section class="slide">
